@@ -4,7 +4,8 @@
   "description": "A tool to test dialogies",
   "main": "server.js",
   "scripts": {
-    "test": "node --harmony_rest_parameters --harmony_destructuring server.js"
+    "test": "node --harmony_rest_parameters --harmony_destructuring server.js",
+    "postinstall": "bower install && grunt "
   },
   "repository": {
     "type": "git",
