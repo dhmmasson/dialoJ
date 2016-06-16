@@ -1,4 +1,22 @@
 extends ./layout.pug
 block content 
-	div
-		span coucou
+	.row
+		form.col.s12.l10.offset-l1.main.z-depth-1.collection#dialogie( method="POST")
+			each dialogie in dialogies 
+				.row.collection-item
+					p.title= dialogie.description 
+					.range-field.row
+						.col.s2
+							h5.right-align= dialogie.southPole
+						.col.s8
+							input( type="range", min=1, max=7, name="dialogie_"+dialogie.id+"_value" ) 		
+						.col.s2
+							h5.left-align= dialogie.northPole
+					div.row
+						each metrique in metriques
+							.div.col.s6
+								input( type="checkbox", id="check_"+dialogie.id+"_"+metrique.id, name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value=1)
+								label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id )= metrique.description
+			button.btn.waves-effect.waves-light.right( type="submit")
+				i.material-icons.left done
+				span Valider

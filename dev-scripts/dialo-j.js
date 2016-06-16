@@ -29,6 +29,28 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
   function () {
 
 
+    $('#dialogie').submit( traitementFormulaire );
+    $('')
+
+
+
+    function traitementFormulaire( e ) {
+      $this = $( this ) ; 
+      e.preventDefault() 
+      formBrut = $this.serializeArray() 
+      formIntermediaire = {}
+      for( var i = 0 ; i < formBrut.length ; i++ ) {        
+        var name = formBrut[i].name
+          , value = formBrut[i].value
+          , [, dialogie, criteria] = name.match(/dialogie_(\d*)_(.*)/) ;
+        if( formIntermediaire[ dialogie ] === undefined ) formIntermediaire[ dialogie ] = {}
+        formIntermediaire[ dialogie ][criteria] = value 
+      }
+      
+
+    
+    }
+
 
   }
 )
