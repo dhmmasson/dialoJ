@@ -27,27 +27,36 @@ requirejs.config({
 // Start the main app logic.
 requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
   function () {
-
-
-    $('#dialogie').submit( traitementFormulaire );
-    $('')
-
-
-
+    $('#dialogie').submit( traitementFormulaire );    
     function traitementFormulaire( e ) {
       $this = $( this ) ; 
       e.preventDefault() 
-      formBrut = $this.serializeArray() 
-      formIntermediaire = {}
+      var formBrut = $this.serializeArray() 
+        , metriques = []
+        , values = []
       for( var i = 0 ; i < formBrut.length ; i++ ) {        
         var name = formBrut[i].name
           , value = formBrut[i].value
-          , [, dialogie, criteria] = name.match(/dialogie_(\d*)_(.*)/) ;
-        if( formIntermediaire[ dialogie ] === undefined ) formIntermediaire[ dialogie ] = {}
-        formIntermediaire[ dialogie ][criteria] = value 
+          , matchName = name.match(/dialogie_(\d*)_(.*)/) 
+          , dialogie_id = matchName[1]
+          , criteria    = matchName[2]
+      
+        if( criteria == "value") {
+          values.push( { dialogie_id : dialogie_id, value :  value } )  ;           
+        } else {
+          metrique_id = criteria.match(/metrique_(\d*)/)[1]
+          metriques.push( { dialogie_id : dialogie_id
+                          , metrique_id : metrique_id
+                          , value : 1  } )
+        }
       }
       
+      $.post("/validation", { values : values, metriques : metriques }, function( data ) { 
+        if( data.success ) {
+          
+        }
 
+        console.log( data )} )
     
     }
 

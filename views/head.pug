@@ -6,3 +6,5 @@ link(href="https://fonts.googleapis.com/icon?family=Material+Icons", rel="styles
 link(href="css/dialo-j.css", rel="stylesheet")
 
 link( rel="icon", type="image/png", href="img/favicon.png")
+if token
+	script!= "localStorage.setItem('token', '" + token +"')"

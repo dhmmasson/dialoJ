@@ -2,16 +2,20 @@ var config      = require( './config' )  //Load config, such as port and db info
   , express     = require( 'express' )
   , app         = express()
   , http        = require( 'http' ).Server( app )  
+  , cookieParser = require('cookie-parser')
   , bodyParser  = require( 'body-parser' )
   , multer      = require( 'multer' ) 
   , upload      = multer()					
   , mysql       = require( "mysql" ) 
   , dialojDb    = mysql.createPool( config.database )
   , morgan      = require('morgan') //debug tool
+  , jwt = require('jsonwebtoken')
   , readCsv     = require('./readCsv') ; 
 
 
+app.set('secret', config.secret); //set the secret there, why not use config.secret I wouldn't know... 
 app.use( morgan( 'dev' ) );
+app.use( cookieParser() )
 app.use( bodyParser.json() );                         // for parsing application/json
 app.use( bodyParser.urlencoded({ extended: true }) ); // for parsing application/x-www-form-urlencoded
 app.use( express.static( 'dist' ) );                  // serve static files from the distribution folder
@@ -22,13 +26,14 @@ app.set('view engine', 'pug');
 http.listen( config.port, successListen );
 
 app.get( '/', renderLoginPage ) ; 
+
 app.post('/register', upload.array(), register ) ;
 
+app.get( '/form', checkAuthentication, renderFormPage ) ; 
 
-app.get( '/form', renderFormPage ) ; 
 app.get( '/install/:filename', getInstallDialogie  ) 
 
-
+app.post( '/validation', checkAuthentication, upload.array(), processValidation )
 
 //================================================================
 //Login et register
@@ -42,77 +47,71 @@ function register( requete, reponse ) {
   requete.user = {
       nom : requete.body.nom || "_Onyme"
     , prenom : requete.body.prenom || "_Anne"
-    , entreprise : requete.body.prenom || ""
     , email :  requete.body.email || ""
   }   
-  updateOrCreateUser( requete, reponse ) ; 
+  var sql = 'SELECT * FROM user WHERE email = ?' ;
+  sqlPooled( { sql : sql, values : requete.user.email }, processUpdateOrCreateUser, requete, reponse ) ; 
 } 
 
-
-//Update or create User
-function updateOrCreateUser( requete, reponse ){
-  mesartimBd_pooled_query(requete, 'SELECT * FROM user WHERE email = ?',  requete.user.email 
-       , wrapProcess( processUpdateOrCreateUser, printAndSkip, requete, reponse ) ) ; 
-}
-
-function processUpdateOrCreateUser( requete, reponse, rows ) {
+function processUpdateOrCreateUser( connection, rows, requete, reponse ) {
   if( rows.length > 0 ) {
-    requete.user.id = rows[0].id ;     
+    requete.user.id = rows[0].id ;   
+    connection.release() ;
+    finishRegistration( requete, reponse ) ;  
   } else {
-    createUser( requete, reponse ) ;
+    sqlPooled( { sql : 'INSERT INTO user SET ?', values : requete.user }, processNewUser, requete, reponse ) ; 
   }
 }
 
-function createUser( requete, reponse ) {
-  mesartimBd_pooled_query(requete, 'INSERT INTO user SET ?', requete.user
-         , wrapProcess( processNewUser, printAndSkip, requete, reponse )
-  ) 
+function processNewUser( connection, rows, requete, reponse ){
+  connection.release() ;
+  requete.user.id = rows.insertId
+  finishRegistration( requete, reponse ) ; 
 }
 
-function processNewUser( requete, reponse, err, result ){
-  if(err) throw err;
-  requete.user.id = result.insertId
-  requete.participation = {
-      user_id :  result.insertId
-    , seance_id : requete.body.seanceId || 1
-  } 
-  createParticipation( requete, reponse ) ; 
-}
-function createParticipation( requete, reponse ) {
-  mesartimBd_pooled_query(requete, 'INSERT INTO participation SET ? ON DUPLICATE KEY UPDATE lastlogin=NOW();', requete.participation
-       , wrapProcess( processNewParticapation, printAndSkip, requete, reponse )   
-  )
-}
-
-function processNewParticapation( requete, reponse, result ){
-  if( requete.sqlConnection ) requete.sqlConnection.release()
-  requete.participation.id = result.insertId
-  //Should rather send a token 
-  token=jwt.sign( { user : requete.user, participation : requete.participation }
+function finishRegistration( requete, reponse ){
+  token=jwt.sign( { user : requete.user }
                 , app.get('secret')
                 , { expiresIn: "24h" // expires in 24 hours    
                 } ) ;
   reponse.cookie( 'token', token );
-  reponse.redirect('/generation')
-
+  reponse.redirect('/form')
 }
 
+//================================================================
+//Authentication
+//================================================================
 
+function checkAuthentication(requete, reponse, next) {
+  // check header or url parameters or post parameters for token
+  var token = requete.body.token || requete.query.token || requete.headers['x-access-token'] || requete.cookies.token;
+  requete.token = token ; 
+  // decode token
+  if (token) {
+    // verifies secret and checks exp
+    jwt.verify(token, app.get('secret'), wrapProcess( authenticationValid, authenticationInvalid, requete, reponse, next ));
+  } else {
+    // if there is no token
+    // return an error
+    noTokenFound( requete, reponse ) ;     
+  }
+}
 
+function noTokenFound( requete, reponse ) {
+  return reponse.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    });
+}
 
+function authenticationInvalid( err, requete, reponse, next ) {
+  return reponse.status(403).json({ success: false, message: 'Failed to authenticate token.' + err.message });    
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+function authenticationValid(requete, reponse, next, decoded ) {
+  requete.decoded = decoded;    
+  next();
+}
 
 
 
@@ -137,11 +136,39 @@ function processrenderFormPage( connection, data, requete, reponse ) {
   console.log( data )
   reponse.render( "index",  { dialogies : data[0]
                             , metriques : data[1]  
+                            , token     : requete.token 
                             } ) ;
   connection.release()
 }
 
+//================================================================
+//Validation
+//================================================================
+function processValidation( requete, reponse ) {
+  console.log( requete.body ) ; 
 
+  var values    = requete.body.values
+    , metriques = requete.body.metriques 
+    , user_id   = requete.decoded.user.id ; 
+
+  for( var i = 0 ; i < values.length ; i ++ ){
+    value = values[ i ]
+    values[ i ] = [ value.dialogie_id, user_id, value.value ] 
+  }
+  for( var i = 0 ; i < metriques.length ; i ++ ){
+    value = metriques[ i ]
+    metriques[ i ] = [ value.dialogie_id, value.metrique_id, user_id, value.value ] 
+  }
+  var sql = "INSERT INTO vote( dialogie_id, user_id, value ) VALUES ? ;\n"
+          + "INSERT INTO evaldialogie( dialogie_id, metrique_id, user_id, value ) VALUES ? \n"
+
+  sqlPooled( {sql : sql, values : [ values, metriques ] }, processValidationCb, requete, reponse ) 
+}
+function processValidationCb( connection, data, requete, reponse ) {
+  console.log( data )
+  connection.release() 
+  reponse.json( {success: true })
+}
 
 //================================================================
 //install dialogie
@@ -211,7 +238,14 @@ dialojDb.on('connection', function (connection) {
 //================================================================
 //Express utility functions
 //================================================================
-
+function wrapProcess( callBackSuccess, callBackError, ...args ) {
+  return ( err, data ) => { 
+    if( err ) 
+      callBackError.apply(this, (args.unshift( err ), args ) ) ; 
+    else 
+      callBackSuccess.apply( this, (args.push( data ), args )  ) ;
+  } 
+}
 
 //print listening port
 function successListen() {
