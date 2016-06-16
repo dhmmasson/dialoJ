@@ -1,0 +1,13 @@
+@import "components/color" ;
+
+//Define primary color and stuff
+$primary-color: color("orange", "lighten-1") !default;
+$secondary-color: color("cyan", "darken-1") !default;
+
+@import "materialize" ;
+
+.img-logo {
+  height : 64px ; 
+}
+
+//Import my own stuf

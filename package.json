@@ -1,0 +1,32 @@
+{
+  "name": "dialo-j",
+  "version": "1.0.0",
+  "description": "A tool to test dialogies",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --harmony_rest_parameters --harmony_destructuring server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhmmasson/dialoJ.git"
+  },
+  "author": "dhim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhmmasson/dialoJ/issues"
+  },
+  "homepage": "https://github.com/dhmmasson/dialoJ#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "bower": "^1.7.9",
+    "express": "^4.13.4",
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-sass": "^1.2.0",
+    "morgan": "^1.7.0",
+    "multer": "^1.1.0",
+    "mysql": "^2.11.1",
+    "node-sass": "^3.7.0",
+    "pug": "^2.0.0-beta3"
+  }
+}

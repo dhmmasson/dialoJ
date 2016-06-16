@@ -1,0 +1,24 @@
+{
+  "name": "dialo-j",
+  "description": "A tool to test dialogies",
+  "main": "scripts/dialo-j.js",
+  "authors": [
+    "dhim"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/dhmmasson/dialoJ",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Materialize": "materialize#^0.97.6",
+    "requirejs": "^2.2.0",
+    "jquery": "^3.0.0",
+    "jquery-ui": "jqueryui#^1.11.4"
+  }
+}
