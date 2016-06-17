@@ -24,7 +24,7 @@ p.title {
 	text-align:justify;
 }
 
-#a0-lock.a0-theme-default {
+body #a0-lock.a0-theme-default {
   .a0-nocentrix {
     @extend .row ;
   }
@@ -39,11 +39,11 @@ p.title {
      @extend .z-depth-1;
     padding : 0 !important ;
     .a0-top-header {
-      background : $primary-color !important; 
-      color : white !important;
+      background : $primary-color ; 
+      color : white ;
     
       .a0-bg-gradient {
-        background : transparent !important ;
+        background : transparent ;
       }
     }
 

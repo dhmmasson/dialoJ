@@ -3,6 +3,7 @@
       container: 'root'
     ,  socialBigButtons: true
     , primaryColor : '#ffa726'
+    , gravatar : false 
     , dict: 'fr'
     , icon: '/img/dialoJ.png'
     , callbackURL: 'http://localhost:5001/callback'

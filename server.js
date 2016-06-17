@@ -174,22 +174,25 @@ function processrenderFormPage( connection, data, requete, reponse ) {
 //================================================================
 function processValidation( requete, reponse ) {
   
-  var values    = JSON.parse( requete.body.values ) 
+  var votes    = JSON.parse( requete.body.values ) 
     , metriques = JSON.parse( requete.body.metriques )
     , user_id   = requete.decoded.user.id ; 
 
-  for( var i = 0 ; i < values.length ; i ++ ){
-    value = values[ i ]
-    values[ i ] = [ value.dialogie_id, user_id, value.value ] 
+  for( var i = 0 ; i < votes.length ; i ++ ){
+    value = votes[ i ]
+    votes[ i ] = [ value.dialogie_id, user_id, value.value ] 
   }
   for( var i = 0 ; i < metriques.length ; i ++ ){
     value = metriques[ i ]
     metriques[ i ] = [ value.dialogie_id, value.metrique_id, user_id, value.value ] 
   }
   var sql = "INSERT INTO vote( dialogie_id, user_id, value ) VALUES ? ;\n"
-          + "INSERT INTO evaldialogie( dialogie_id, metrique_id, user_id, value ) VALUES ? \n"
-
-  sqlPooled( {sql : sql, values : [ values, metriques ] }, processValidationCb, requete, reponse ) 
+  var values = [ votes ]
+  if( metriques.length > 0 )  {
+    sql += "INSERT INTO evaldialogie( dialogie_id, metrique_id, user_id, value ) VALUES ? \n" ;
+    values.push( metriques )
+  }  
+  sqlPooled( {sql : sql, values : values }, processValidationCb, requete, reponse ) 
 }
 function processValidationCb( connection, data, requete, reponse ) {  
   connection.release() 
@@ -251,7 +254,7 @@ function sqlPooled( options, callback, ...args ) {
     (err, connection ) => {
       if( err ) return console.error( "sqlPooled: Can't get connection ", err ) ; 
       var query = connection.query( options, wrapProcessQueryCallback( callback, connection, args ) )
-      //console.log( query.sql )
+      console.log( query.sql )
     }
   )
 }
