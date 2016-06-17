@@ -3,6 +3,7 @@ var config      = require( './config' )  //Load config, such as port and db info
   , app         = express()
   , http        = require( 'http' ).Server( app )  
   , cookieParser = require('cookie-parser')
+  , session     = require('express-session')
   , bodyParser  = require( 'body-parser' )
   , multer      = require( 'multer' ) 
   , upload      = multer()					
@@ -10,12 +11,23 @@ var config      = require( './config' )  //Load config, such as port and db info
   , dialojDb    = mysql.createPool( config.database )
   , morgan      = require('morgan') //debug tool
   , jwt = require('jsonwebtoken')
-  , readCsv     = require('./readCsv') ; 
+  , readCsv     = require('./readCsv')
+  , passport    = require('passport')
+  , strategy    = require('./authentication/setup-passport')
+
+  ; 
 
 
-app.set('secret', config.secret); //set the secret there, why not use config.secret I wouldn't know... 
+
 app.use( morgan( 'dev' ) );
+
+app.set('secret', config.secret); 
 app.use( cookieParser() )
+
+app.use( session({ secret: config.secret, resave: false,  saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use( bodyParser.json() );                         // for parsing application/json
 app.use( bodyParser.urlencoded({ extended: true }) ); // for parsing application/x-www-form-urlencoded
 app.use( express.static( 'dist' ) );                  // serve static files from the distribution folder
@@ -27,14 +39,18 @@ http.listen( config.port, successListen );
 
 app.get( '/', renderLoginPage ) ; 
 
-app.post('/register', upload.array(), register ) ;
 
-app.get( '/form', checkAuthentication, renderFormPage ) ; 
+app.get( '/callback',  passport.authenticate('auth0', { failureRedirect: '/' }), register ) ;
 
-app.get( '/install/:filename', getInstallDialogie  ) 
+app.get( '/splash', checkAuthentication, renderStartUpPage ) ; 
+app.get( '/form'  , checkAuthentication, renderFormPage ) ; 
+
+//TODO : Reactivate when admin stuff is ok
+//app.get( '/install/:filename', getInstallDialogie  ) 
 
 app.post( '/validation', checkAuthentication, upload.array(), processValidation )
 
+app.get( '/remerciment', checkAuthentication, renderFinalPage )
 //================================================================
 //Login et register
 //================================================================
@@ -43,45 +59,50 @@ function renderLoginPage( requete, reponse ) {
 }
 
 function register( requete, reponse ) {
-  //Test if user exist 
-  requete.user = {
-      nom : requete.body.nom || "_Onyme"
-    , prenom : requete.body.prenom || "_Anne"
-    , email :  requete.body.email || ""
-  }   
-  var sql = 'SELECT * FROM user WHERE email = ?' ;
-  sqlPooled( { sql : sql, values : requete.user.email }, processUpdateOrCreateUser, requete, reponse ) ; 
+  if (!requete.user) {
+    throw new Error('user null');
+  }
+  requete.dialoJ_user = {
+    nom : requete.user.name.famillyName || requete.user.nickname
+  , prenom : requete.user.name.givenName
+  , email  : requete.user.emails[0].value 
+  , auth0_id : requete.user.id 
+  }
+  //Check if user exist
+  var sql = 'SELECT * FROM user WHERE  auth0_id = ?' ;
+  sqlPooled( { sql : sql, values : requete.user.id }, processUpdateOrCreateUser, requete, reponse ) ; 
 } 
 
 function processUpdateOrCreateUser( connection, rows, requete, reponse ) {
   if( rows.length > 0 ) {
-    requete.user.id = rows[0].id ;   
+    requete.dialoJ_user.id = rows[0].id ;   
     connection.release() ;
     finishRegistration( requete, reponse ) ;  
   } else {
-    sqlPooled( { sql : 'INSERT INTO user SET ?', values : requete.user }, processNewUser, requete, reponse ) ; 
+    sqlPooled( { sql : 'INSERT INTO user SET ?', values : requete.dialoJ_user }, processNewUser, requete, reponse ) ; 
   }
 }
 
 function processNewUser( connection, rows, requete, reponse ){
   connection.release() ;
-  requete.user.id = rows.insertId
+  requete.dialoJ_user.id = rows.insertId
   finishRegistration( requete, reponse ) ; 
 }
 
 function finishRegistration( requete, reponse ){
-  token=jwt.sign( { user : requete.user }
+  console.log( requete.dialoJ_user ) ;
+  //sqlPooled( { sql : 'INSERT INTO user SET ?', values : requete.user }, processNewUser, requete, reponse ) ; 
+  token=jwt.sign( { user : requete.dialoJ_user }
                 , app.get('secret')
                 , { expiresIn: "24h" // expires in 24 hours    
                 } ) ;
   reponse.cookie( 'token', token );
-  reponse.redirect('/form')
+  reponse.redirect('/splash')
 }
 
 //================================================================
 //Authentication
 //================================================================
-
 function checkAuthentication(requete, reponse, next) {
   // check header or url parameters or post parameters for token
   var token = requete.body.token || requete.query.token || requete.headers['x-access-token'] || requete.cookies.token;
@@ -114,6 +135,13 @@ function authenticationValid(requete, reponse, next, decoded ) {
 }
 
 
+//================================================================
+//Startup PAGE
+//================================================================
+
+function renderStartUpPage( requete, reponse ) {
+  reponse.render( "auth0", {user:requete.decoded} ) ;
+}
 
 
 
@@ -133,7 +161,6 @@ function renderFormPage( requete, reponse ) {
 }
 //Render the page using the data from the db
 function processrenderFormPage( connection, data, requete, reponse ) {  
-  console.log( data )
   reponse.render( "index",  { dialogies : data[0]
                             , metriques : data[1]  
                             , token     : requete.token 
@@ -145,10 +172,9 @@ function processrenderFormPage( connection, data, requete, reponse ) {
 //Validation
 //================================================================
 function processValidation( requete, reponse ) {
-  console.log( requete.body ) ; 
-
-  var values    = requete.body.values
-    , metriques = requete.body.metriques 
+  
+  var values    = JSON.parse( requete.body.values ) 
+    , metriques = JSON.parse( requete.body.metriques )
     , user_id   = requete.decoded.user.id ; 
 
   for( var i = 0 ; i < values.length ; i ++ ){
@@ -164,11 +190,21 @@ function processValidation( requete, reponse ) {
 
   sqlPooled( {sql : sql, values : [ values, metriques ] }, processValidationCb, requete, reponse ) 
 }
-function processValidationCb( connection, data, requete, reponse ) {
-  console.log( data )
+function processValidationCb( connection, data, requete, reponse ) {  
   connection.release() 
-  reponse.json( {success: true })
+  //reponse.json( {success: true })
+  reponse.redirect("/remerciment")
 }
+
+
+//================================================================
+//Remerciement
+//================================================================
+function renderFinalPage( requete, reponse ) {
+  reponse.render( "final", requete.decoded ) ;
+}
+
+
 
 //================================================================
 //install dialogie
@@ -180,7 +216,6 @@ function getInstallDialogie( requete, reponse ) {
 
 }
 function loadCSV( connection, data, requete, reponse ) {
-  console.log( data[0].version ) ; 
   requete.version = data[0].version + 1  ; 
   connection.release() ; 
   readCsv.read(  "res/" + requete.params.filename , processReadDialogies, requete, reponse  )
@@ -201,6 +236,7 @@ function processReadDialogies( data, requete, reponse ) {
 }
 function renderInstallDialogie( connection, data, requete, reponse ) {
   reponse.json( {success : true, data : data })
+
 }
 
 
@@ -214,14 +250,13 @@ function sqlPooled( options, callback, ...args ) {
     (err, connection ) => {
       if( err ) return console.error( "sqlPooled: Can't get connection ", err ) ; 
       var query = connection.query( options, wrapProcessQueryCallback( callback, connection, args ) )
-      console.log( query.sql )
+      //console.log( query.sql )
     }
   )
 }
 //return a function that process errors, and insert, connection and data in the argument of the callback 
 function wrapProcessQueryCallback( callback, connection,  args ) {
   return ( err, data ) => {
-    console.log( "callback")
     if( err ) return console.error( "wrapProcessQueryCallback: error in sql query", err ) ;
     args.unshift( data ) ;
     args.unshift( connection ) ;
@@ -229,7 +264,7 @@ function wrapProcessQueryCallback( callback, connection,  args ) {
   }
 }
 dialojDb.on('connection', function (connection) {
-  console.log( "connection to database") ; 
+  //console.log( "connection to database") ; 
 });
 
 

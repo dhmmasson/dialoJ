@@ -20,3 +20,6 @@ block content
 			button.btn.waves-effect.waves-light.right( type="submit")
 				i.material-icons.left done
 				span Valider
+		form#hiddenForm( method="POST" action="/validation")
+			input#valuesToSend( type="hidden" name="values" )
+			input#metriquesToSend( type="hidden" name="metriques" )

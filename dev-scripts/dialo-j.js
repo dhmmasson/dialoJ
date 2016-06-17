@@ -50,13 +50,16 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
                           , value : 1  } )
         }
       }
-      
-      $.post("/validation", { values : values, metriques : metriques }, function( data ) { 
-        if( data.success ) {
-          
-        }
+      $("#valuesToSend").val( JSON.stringify(values) ) ;
+      $("#metriquesToSend").val( JSON.stringify(metriques) ) ;
+      $("#hiddenForm").submit() ; 
 
-        console.log( data )} )
+      // $.post("/validation", { values : values, metriques : metriques }, function( data ) { 
+      //   if( data.success ) {
+
+      //   }
+
+      //   console.log( data )} )
     
     }
 

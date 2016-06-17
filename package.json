@@ -23,6 +23,7 @@
     "cookie-parser": "^1.4.3",
     "csv-parse": "^1.1.1",
     "express": "^4.13.4",
+    "express-session": "^1.13.0",
     "grunt": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-sass": "^1.2.0",
@@ -31,6 +32,8 @@
     "multer": "^1.1.0",
     "mysql": "^2.11.1",
     "node-sass": "^3.7.0",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.5.2",
     "pug": "^2.0.0-beta3"
   }
 }
