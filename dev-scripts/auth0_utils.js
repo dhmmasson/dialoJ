@@ -6,7 +6,7 @@
     , gravatar : false 
     , dict: 'fr'
     , icon: '/img/dialoJ.png'
-    , callbackURL: 'http://localhost:5001/callback'
+    , callbackURL: 'https://dialo-j.herokuapp.com/callback'
     , responseType: 'code'
     , authParams: {
       scope: 'openid email'  // Learn about scopes: https://auth0.com/docs/scopes 
