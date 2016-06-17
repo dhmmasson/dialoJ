@@ -1,6 +1,9 @@
-extends ./layout.pug
-block scripts
+//login page
+doctype html 
+html 
 	script( src="scripts/lib/auth0-lock/build/auth0-lock.min.js" )
-block content 
-	.row#root
-	script( src="scripts/auth0_utils.js")
+	include head.pug		
+	body
+		.row#root
+		script( src="scripts/auth0_utils.js")
+

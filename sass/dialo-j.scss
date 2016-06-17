@@ -24,9 +24,34 @@ p.title {
 	text-align:justify;
 }
 
-.a0-panel{
-  margin: auto ; 
+#a0-lock.a0-theme-default {
+  .a0-nocentrix {
+    @extend .row ;
+  }
+  .a0-panel{
+
+     @extend .col ;
+     @extend .s12 ;
+     @extend .m10 ;
+     @extend .offset-m1 ;
+     @extend .l6 ;
+     @extend .offset-l3 ;
+     @extend .z-depth-1;
+    padding : 0 !important ;
+    .a0-top-header {
+      background : $primary-color !important; 
+      color : white !important;
+    
+      .a0-bg-gradient {
+        background : transparent !important ;
+      }
+    }
+
+
+  }
+
 }
+
 
 /***************
       Range

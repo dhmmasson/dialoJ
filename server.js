@@ -63,7 +63,7 @@ function register( requete, reponse ) {
     throw new Error('user null');
   }
   requete.dialoJ_user = {
-    nom : requete.user.name.famillyName || requete.user.nickname
+    nom : requete.user.name.familyName || requete.user.nickname
   , prenom : requete.user.name.givenName
   , email  : requete.user.emails[0].value 
   , auth0_id : requete.user.id 
@@ -140,7 +140,8 @@ function authenticationValid(requete, reponse, next, decoded ) {
 //================================================================
 
 function renderStartUpPage( requete, reponse ) {
-  reponse.render( "auth0", {user:requete.decoded} ) ;
+  console.log( requete.decoded )
+  reponse.render( "auth0", requete.decoded ) ;
 }
 
 

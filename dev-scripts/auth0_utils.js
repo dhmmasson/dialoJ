@@ -1,7 +1,8 @@
   var lock = new Auth0Lock('EdNxwib3UPPqgPjZZbcAcmRN6wglUNQr', 'app52265043.auth0.com');    
   lock.show({
       container: 'root'
-     ,  socialBigButtons: true
+    ,  socialBigButtons: true
+    , primaryColor : '#ffa726'
     , dict: 'fr'
     , icon: '/img/dialoJ.png'
     , callbackURL: 'http://localhost:5001/callback'
