@@ -63,7 +63,7 @@ function register( requete, reponse ) {
     throw new Error('user null');
   }
   requete.dialoJ_user = {
-    nom : requete.user.name.familyName || requete.user.nickname
+    nom :    requete.user.nickname || requete.user.name.familyName
   , prenom : requete.user.name.givenName
   , email  : requete.user.emails[0].value 
   , auth0_id : requete.user.id 
