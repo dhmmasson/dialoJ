@@ -148,12 +148,12 @@ function authenticationValid(requete, reponse, next, decoded ) {
 
 function renderStartUpPage( requete, reponse ) {
   console.log( requete.decoded )
-  reponse.render( "splash", {user : requete.decoded} ) ;
+  reponse.render( "splash", user : requete.decoded ) ;
 }
 
 function renderIntro( requete, reponse ) {
   console.log( requete.decoded )
-  reponse.render( "splash2", {user : requete.decoded} ) ;
+  reponse.render( "splash2", user : requete.decoded ) ;
 }
 
 
@@ -221,7 +221,7 @@ function processValidationCb( connection, data, requete, reponse ) {
 //================================================================
 function renderFinalPage( requete, reponse ) {
   console.log( requete.user )
-  reponse.render( "final", { dialoJUser : requete.decoded, socialNetworkUserJSON : JSON.stringify(requete.user), socialNetworkUser : requete.user  } ) ;
+  reponse.render( "final", { dialoJUser : requete.decoded.user, socialNetworkUserJSON : JSON.stringify(requete.user), socialNetworkUser : requete.user  } ) ;
 }
 
 //================================================================
