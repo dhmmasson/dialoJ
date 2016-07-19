@@ -230,7 +230,7 @@ function processValidationCb( connection, data, requete, reponse ) {
 //Remerciement
 //================================================================
 function renderFinalPage( requete, reponse ) {
-  reponse.render( "final", { dialoJUser : requete.decoded, socialNetworkUser : requete.user } ) ;
+  reponse.render( "final", { dialoJUser : requete.decoded, socialNetworkUserJSON : JSON.stringify(requete.user), socialNetworkUser : requete.user  } ) ;
 }
 
 //================================================================
