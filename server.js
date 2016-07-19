@@ -113,17 +113,7 @@ function checkAuthentication(requete, reponse, next) {
   requete.token = token ; 
   // decode token
     
-  if( process.env.LOCAL == "true" ) { 
-      requete.decoded = {
-        id : "2"
-      , nom :    "Masson"
-      , prenom : "Dimitri"
-      , email  : "dim.masson@gmail.com"
-      , auth0_id : 0 
-      }
-      next() 
-      return ;
-    }
+  
   if (token) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('secret'), wrapProcess( authenticationValid, authenticationInvalid, requete, reponse, next ));
@@ -230,6 +220,7 @@ function processValidationCb( connection, data, requete, reponse ) {
 //Remerciement
 //================================================================
 function renderFinalPage( requete, reponse ) {
+  console.log( requete.user )
   reponse.render( "final", { dialoJUser : requete.decoded, socialNetworkUserJSON : JSON.stringify(requete.user), socialNetworkUser : requete.user  } ) ;
 }
 
