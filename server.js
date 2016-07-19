@@ -114,7 +114,8 @@ function checkAuthentication(requete, reponse, next) {
   requete.token = token ; 
   // decode token
     
-  
+  //next() ;
+  //return 
   if (token) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('secret'), wrapProcess( authenticationValid, authenticationInvalid, requete, reponse, next ));
@@ -230,7 +231,7 @@ function renderFinalPage( requete, reponse ) {
 //================================================================
 function completeProfile( requete, reponse ) {
   console.log( requete.body )
-  var sql = "UPDATE user SET ? WHERE id = " + requete.decoded.id ;  
+  var sql = "UPDATE user SET ? WHERE id = " + requete.decoded.user.id ;  
   sqlPooled(  {sql : sql, values : requete.body }, processCompleteProfile, requete, reponse )
   
 }

@@ -2,22 +2,9 @@ extends ./layout.pug
 block content 
 	.row 
 		form.col.s12.m10.offset-m1.main.z-depth-1#completeProfile( method="POST" action="/completeProfile" )
-			h2.center-align Merci de votre contribution
-			script!= "var user = " + socialNetworkUserJSON + ""
-			p.
-				Nous vous recontacterons personnellement courant Septembre pour vous remercier.
-				Si vous désirez d’ores et déjà nous transmettre de plus amples feedbacks, commentaires, suggestions ou critiques nous sommes ouverts à toutes remarques de votre part afin de perfectionner ce questionnaire. 
-			p.
-				Contactez-nous aux adresses suivantes:  
-			ul
-				li j.faham@estia.fr
-				li j.legardeur@estia.fr
-				li d.masson@estia.fr
-
-			h3 Avant de partir
+			h3 A propos de vous
 			p.
 				Pour faciliter l'étude statistique des informations remplies par les participants, pourriez vous compléter s'il vous plait les informations suivantes. 
-
 			.row
 				.input-field.col.s12.m12.l6
 					input( id="first_name" name="prenom" type="text" class="validate" placeholder="" value=dialoJUser.prenom)
@@ -82,4 +69,3 @@ block content
 					label Type d'organisme-Profession				
 			.row
 				button.btn.waves-effects.waves-light.col.m6.offset-m3.s12( href="/form", type="submit") Terminer
-			include ./cnil.pug

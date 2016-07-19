@@ -31,7 +31,14 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
     $("select").material_select()   
     // $("#completeProfile").submit( completeProfile ) ;
 
+    $(".next").click( goToNext ) ; 
 
+    function goToNext( e ) {
+      $this = $( this ) ; 
+      e.preventDefault() 
+      $( $this.data( "tab" )).click()
+      $("body").scrollTop(0) ;
+    }
 
     function traitementFormulaire( e ) {
       $this = $( this ) ; 

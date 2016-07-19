@@ -5,11 +5,12 @@ block content
 			ul.tabs
 				each categorie in categories 
 					li.tab.col.s2
-						a( href="#cat_"+categorie.id )= categorie.description 
+						a( id="tab_" + categorie.id,  href="#cat_"+categorie.id )= categorie.description 
 	.row
 		form.col.s12.l10.offset-l1.main.z-depth-1#dialogie( method="POST")
-			each categorie in categories 
+			each categorie, index  in categories 
 				.col.s12( id="cat_"+categorie.id )
+					h5= "catégorie : " + categorie.description 
 					div.collection
 						each dialogie in dialogies 
 							if dialogie.categorie_id == categorie.id
@@ -27,9 +28,12 @@ block content
 											.div.col.s6
 												input( type="checkbox", id="check_"+dialogie.id+"_"+metrique.id, name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value=1)
 												label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id )= metrique.description
-			button.btn.waves-effect.waves-light.right( type="submit")
-				i.material-icons.left done
-				span Valider
+					if index == categories.length - 1 
+						button.btn.waves-effect.waves-light.right( type="submit")
+							i.material-icons.left done
+							span Valider
+					else 
+						a.btn.right.next( href="#cat_"+categories[ index + 1 ].id data-tab="#tab_"+categories[ index + 1 ].id  ) catégorie suivante
 		form#hiddenForm( method="POST" action="/validation")
 			input#valuesToSend( type="hidden" name="values" )
 			input#metriquesToSend( type="hidden" name="metriques" )
