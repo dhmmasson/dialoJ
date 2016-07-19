@@ -148,12 +148,12 @@ function authenticationValid(requete, reponse, next, decoded ) {
 
 function renderStartUpPage( requete, reponse ) {
   console.log( requete.decoded )
-  reponse.render( "splash", user : requete.decoded ) ;
+  reponse.render( "splash",  requete.decoded ) ;
 }
 
 function renderIntro( requete, reponse ) {
   console.log( requete.decoded )
-  reponse.render( "splash2", user : requete.decoded ) ;
+  reponse.render( "splash2", requete.decoded ) ;
 }
 
 
