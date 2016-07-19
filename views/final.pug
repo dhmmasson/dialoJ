@@ -1,9 +1,9 @@
 extends ./layout.pug
 block content 
 	.row 
-		form.col.s12.m10.offset-m1.main.z-depth-1#completeProfile
+		form.col.s12.m10.offset-m1.main.z-depth-1#completeProfile( method="POST" action="/completeProfile" )
 			h2.center-align Merci de votre contribution
-			script!= "var user = JSON.parse( " + socialNetworkUserJSON + ")"
+			script!= "var user = " + socialNetworkUserJSON + ""
 			p.
 				Nous vous recontacterons personnellement courant Septembre pour vous remercier.
 				Si vous désirez d’ores et déjà nous transmettre de plus amples feedbacks, commentaires, suggestions ou critiques nous sommes ouverts à toutes remarques de votre part afin de perfectionner ce questionnaire. 
@@ -16,14 +16,14 @@ block content
 
 			h3 Avant de partir
 			p.
-				Pour faciliter l'étude statistique des informations rempli par les participants, pourriez vous compléter les informations suivante. 
+				Pour faciliter l'étude statistique des informations remplies par les participants, pourriez vous compléter s'il vous plait les informations suivantes. 
 
 			.row
 				.input-field.col.s12.m12.l6
-					input( id="first_name" name="prenom" type="text" class="validate" placeholder="")
+					input( id="first_name" name="prenom" type="text" class="validate" placeholder="" value=user.prenom)
 					label( for="first_name" ) Prénom
 				.input-field.col.s12.m12.l6
-					input( id="last_name"  name="nom" type="text" class="validate"  placeholder="")
+					input( id="last_name"  name="nom" type="text" class="validate"  placeholder="" value=user.nom)
 					label( for="last_name" ) Nom
 			.row
 				.input-field.col.s12.l6

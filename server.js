@@ -67,10 +67,11 @@ function register( requete, reponse ) {
   }
   console.log( requete.user )
   requete.dialoJ_user = {
-    nom :    requete.user.nickname || requete.user.name.familyName
+    nom :    requete.user.name.familyName || requete.user.nickname 
   , prenom : requete.user.name.givenName
   , email  : requete.user.emails[0].value 
   , auth0_id : requete.user.id 
+  , displayName :requete.user._json.displayName || requete.user.nickname 
   }
   //Check if user exist
   var sql = 'SELECT * FROM user WHERE  auth0_id = ?' ;
@@ -235,7 +236,7 @@ function completeProfile( requete, reponse ) {
 }
 function processCompleteProfile( connection, data, requete, reponse ) {
   connection.release() 
-  reponse.json( { success : true, data : data}) ;
+  reponse.render( "final2" ) ;
 }
 //================================================================
 //install dialogie
