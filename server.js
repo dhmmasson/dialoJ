@@ -64,6 +64,7 @@ function register( requete, reponse ) {
   if (!requete.user) {
     throw new Error('user null');
   }
+  console.log( requete.user )
   requete.dialoJ_user = {
     nom :    requete.user.nickname || requete.user.name.familyName
   , prenom : requete.user.name.givenName
