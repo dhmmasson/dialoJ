@@ -18,7 +18,20 @@ body {
 	background : #eee ; 
 }
 
+.onglets {
+  margin-bottom: 0 !important;
+  .col {
+    padding : 0 !important ; 
+  } 
+
+}
 //Import my own stuf
+
+.tabs .tab a.active {
+  @extend .z-depth-1-half; 
+  background-color : $secondary-color;
+  color : white ; 
+}
 
 nav {
   background-color : transparent !important ;
