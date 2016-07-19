@@ -28,6 +28,11 @@ requirejs.config({
 requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
   function () {
     $('#dialogie').submit( traitementFormulaire );    
+    $("select").material_select()   
+    $("#completeProfile").submit( completeProfile ) ;
+
+
+
     function traitementFormulaire( e ) {
       $this = $( this ) ; 
       e.preventDefault() 
@@ -53,6 +58,7 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
       $("#valuesToSend").val( JSON.stringify(values) ) ;
       $("#metriquesToSend").val( JSON.stringify(metriques) ) ;
       $("#hiddenForm").submit() ; 
+      $('.collapsible').collapsible()
 
       // $.post("/validation", { values : values, metriques : metriques }, function( data ) { 
       //   if( data.success ) {
@@ -61,6 +67,16 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
 
       //   console.log( data )} )
     
+    }
+
+    function completeProfile( e ) {
+      $this = $( this ) ; 
+      e.preventDefault() 
+      var data = $this.serialize()
+      console.log( data )
+      $.post( "/completeProfile", data, function() {} ) 
+
+
     }
 
 

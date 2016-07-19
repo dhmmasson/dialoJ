@@ -1,11 +1,6 @@
-nav
-	.nav-wrapper
+nav.row 
+	.nav-wrapper.col.s12.l10.offset-l1
 		img.img-logo.hide-on-med-and-down( src="/img/dialoJ.png")
 		a.brand-logo( href="#" ) 
 			span DialoJ
-		a.button-collapse( data-activates="menuMobile")
-			i.material-icons menu
-		ul.right.hide-on-med-and-down
-			include menu.pug
-		ul.side-nav#menuMobile
-			include menu.pug
+		block navigation

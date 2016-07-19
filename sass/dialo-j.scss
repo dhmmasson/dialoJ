@@ -20,100 +20,148 @@ body {
 
 //Import my own stuf
 
-p.title {
-	text-align:justify;
-}
+nav {
+  background-color : transparent !important ;
+  margin-bottom: 0px !important ;
+  box-shadow : none !important ; 
 
+  .nav-wrapper {
+    background-color : $primary-color ;
+    box-shadow : none !important ; 
+  }
+}
+img.clip {
+  max-width: 640px ;
+  object-fit: cover ;  
+  object-position: 50% calc( 50% - 42px ) ; 
+  margin : 0px auto ; 
+  display: block ;
+  
+}
+.radioGroup{
+  label {
+    position: absolute;
+    top: -14px;
+    font-size: 0.8rem;
+  } 
+  span {
+    margin-top: 23px ;
+  }
+  margin-bottom: 20px;
+}
+p.title {
+  text-align:justify;
+}
+p.justified {
+  text-align:justify;
+}
+span.italic {
+  font-style: italic ;
+}
+span.brand {
+  color : color( "blue-grey", 'darken-2') ; 
+  font-style: italic ;
+}
+//coucou #dimitri
+.bold {
+  font-weight: bold ; 
+  color : color( "blue-grey", 'darken-2') ; 
+}
+body ul.browser-default li {
+  list-style-type: initial !important;
+  margin-left : 1em ;
+}
 body #a0-lock.a0-theme-default {
   .a0-nocentrix {
     @extend .row ;
   }
   .a0-panel{
 
-     @extend .col ;
-     @extend .s12 ;
-     @extend .m10 ;
-     @extend .offset-m1 ;
-     @extend .l6 ;
-     @extend .offset-l3 ;
-     @extend .z-depth-1;
-    padding : 0 !important ;
-    .a0-top-header {
-      background : $primary-color ; 
-      color : white ;
+   @extend .col ;
+   @extend .s12 ;
+   @extend .m10 ;
+   @extend .offset-m1 ;
+   @extend .l6 ;
+   @extend .offset-l3 ;
+   @extend .z-depth-1;
+   padding : 0 !important ;
+   .a0-top-header {
+    background : $primary-color ; 
+    color : white ;
     
-      .a0-bg-gradient {
-        background : transparent ;
-      }
+    .a0-bg-gradient {
+      background : transparent ;
     }
-
-
   }
+
+
+}
 
 }
 
 
 /***************
       Range
-***************/
+      ***************/
 
-.range-field {
-  position: relative;
-}
+      .range-field {
+        position: relative;
+      }
 
-input[type=range], input[type=range] + .thumb {
-  @extend .no-select;
-  cursor: pointer;
-}
+      input[type=range], input[type=range] + .thumb {
+        @extend .no-select;
+        cursor: pointer;
+      }
 
-input[type=range] {
-  position: relative;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  width: 100%;
-  margin: 15px 0px;
-  padding: 0;
-}
-input[type=range] + .thumb {
-  position: absolute;
-  visibility: none ;
-  border: none;
-  height: 0;
-  width: 0;
-  border-radius: 0;
-  background-color: transparent;
-  top: 10px;
-  margin-left: -6px;
+      input[type=range] {
+        position: relative;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        width: 100%;
+        margin: 15px 0px;
+        padding: 0;
+      }
+      input[type=range] + .thumb {
+        position: absolute;
+        visibility: none ;
+        border: none;
+        height: 0;
+        width: 0;
+        border-radius: 0;
+        background-color: transparent;
+        top: 10px;
+        margin-left: -6px;
 
-  transform-origin: 50% 50%;
-  transform: rotate(-45deg);
+        transform-origin: 50% 50%;
+        transform: rotate(-45deg);
 
-  .value {
-    display: block;
-    width: 30px;
-    text-align: center;
-    color: black;
-    font-size: 0;
-    transform: rotate(45deg);
-  }
+        .value {
+          display: block;
+          width: 30px;
+          text-align: center;
+          color: black;
+          font-size: 0;
+          transform: rotate(45deg);
+        }
 
-  &.active {
-    border-radius: 0;
+        &.active {
+          border-radius: 0;
 
-    .value {
-      color: $input-bg-color;
-      margin-left: -1px;
-      margin-top: 8px;
-      font-size: 10px;
-    }
-  }
-}
+          .value {
+            visibility: hidden !important ;
+            color: $input-bg-color;
+            margin-left: -1px;
+            margin-top: 8px;
+            font-size: 10px;
+          }
+        }
+      }
 
 
-input[type=range]:focus {
-  outline: none;
-}
+      input[type=range]:focus {
+        outline: none;
+      }
 
 // WebKit
 input[type=range]{
@@ -182,7 +230,7 @@ input[type=range]::-moz-range-thumb {
   background-color: transparent;
   transform-origin: 50% 50%;
   margin-top: -3px;
-   border-radius: 0px ; 
+  border-radius: 0px ; 
 }
 
 /*hide the outline behind the border*/

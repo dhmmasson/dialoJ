@@ -44,13 +44,15 @@ app.get( '/callback',  passport.authenticate('auth0', { failureRedirect: '/' }),
 
 app.get( '/splash', checkAuthentication, renderStartUpPage ) ; 
 app.get( '/form'  , checkAuthentication, renderFormPage ) ; 
+app.get( '/final'  , checkAuthentication, renderFinalPage ) ; 
 
 //TODO : Reactivate when admin stuff is ok
-//app.get( '/install/:filename', getInstallDialogie  ) 
+app.get( '/install/:filename', getInstallDialogie  ) 
 
 app.post( '/validation', checkAuthentication, upload.array(), processValidation )
 
-app.get( '/remerciment', checkAuthentication, renderFinalPage )
+app.get( '/remerciment', checkAuthentication, upload.array(), renderFinalPage ) ; 
+app.post( "/completeProfile", checkAuthentication, completeProfile ) ; 
 //================================================================
 //Login et register
 //================================================================
@@ -108,6 +110,18 @@ function checkAuthentication(requete, reponse, next) {
   var token = requete.body.token || requete.query.token || requete.headers['x-access-token'] || requete.cookies.token;
   requete.token = token ; 
   // decode token
+    
+  if( process.env.LOCAL == "true" ) { 
+      requete.decoded = {
+        id : "2"
+      , nom :    "Masson"
+      , prenom : "Dimitri"
+      , email  : "dim.masson@gmail.com"
+      , auth0_id : 0 
+      }
+      next() 
+      return ;
+    }
   if (token) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('secret'), wrapProcess( authenticationValid, authenticationInvalid, requete, reponse, next ));
@@ -126,6 +140,7 @@ function noTokenFound( requete, reponse ) {
 }
 
 function authenticationInvalid( err, requete, reponse, next ) {
+
   return reponse.status(403).json({ success: false, message: 'Failed to authenticate token.' + err.message });    
 }
 
@@ -141,7 +156,7 @@ function authenticationValid(requete, reponse, next, decoded ) {
 
 function renderStartUpPage( requete, reponse ) {
   console.log( requete.decoded )
-  reponse.render( "auth0", requete.decoded ) ;
+  reponse.render( "splash", {user : requete.decoded} ) ;
 }
 
 
@@ -152,18 +167,22 @@ function renderStartUpPage( requete, reponse ) {
 
 //Get the latest dialogies and render the form
 function renderFormPage( requete, reponse ) {
-  var sql = "SELECT id, description, southPole, northPole" + "\n"
+  var sql = "SELECT dialogie.id, dialogie.description as description, southPole, northPole, categorie_id, categorie.description as categorie_description" + "\n"
           + "FROM   dialogie" + "\n"
+          + "JOIN   categorie ON categorie_id = categorie.id "
           + "WHERE  version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + ";\n"
           + "SELECT id, description, type"+ "\n"
           + "FROM   metrique" + "\n"
           + "WHERE  version = ( SELECT MAX( version ) FROM metrique LIMIT 1 )" + ";\n"
+          + "SELECT id, description"+ "\n"
+          + "FROM   categorie" + "\n"          
   sqlPooled( { sql : sql }, processrenderFormPage, requete, reponse ) ; 
 }
 //Render the page using the data from the db
 function processrenderFormPage( connection, data, requete, reponse ) {  
   reponse.render( "index",  { dialogies : data[0]
                             , metriques : data[1]  
+                            , categories : data[2]  
                             , token     : requete.token 
                             } ) ;
   connection.release()
@@ -208,8 +227,19 @@ function renderFinalPage( requete, reponse ) {
   reponse.render( "final", requete.decoded ) ;
 }
 
-
-
+//================================================================
+//Remerciement
+//================================================================
+function completeProfile( requete, reponse ) {
+  console.log( requete.body )
+  var sql = "UPDATE user SET ? WHERE id = " + requete.decoded.id ;  
+  sqlPooled(  {sql : sql, values : requete.body }, processCompleteProfile, requete, reponse )
+  
+}
+function processCompleteProfile( connection, data, requete, reponse ) {
+  connection.release() 
+  reponse.json( { success : true, data : data}) ;
+}
 //================================================================
 //install dialogie
 //================================================================
@@ -225,7 +255,7 @@ function loadCSV( connection, data, requete, reponse ) {
   readCsv.read(  "res/" + requete.params.filename , processReadDialogies, requete, reponse  )
 }
 function processReadDialogies( data, requete, reponse ) { 
-  var sql = "INSERT INTO dialogie( position, description, southPole, northPole, version ) " + "\n"
+  var sql = "INSERT INTO dialogie( position, categorie_id, description, southPole, northPole, version ) " + "\n"
           + "VALUES ? ";
   for( var i = 0 ; i < data.length ; i++ ){
     data[i].push( requete.version )

@@ -1,6 +1,84 @@
 extends ./layout.pug
 block content 
 	.row 
-		.col.s6.main.offset-s3.z-depth-1
-			h2.center-align MERCI
-			p= "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+		form.col.s12.m10.offset-m1.main.z-depth-1#completeProfile
+			h2.center-align Merci de votre contribution
+			p.
+				Nous vous recontacterons personnellement courant Septembre pour vous remercier.
+				Si vous désirez d’ores et déjà nous transmettre de plus amples feedbacks, commentaires, suggestions ou critiques nous sommes ouverts à toutes remarques de votre part afin de perfectionner ce questionnaire. 
+			p.
+				Contactez-nous aux adresses suivantes:  
+			ul
+				li j.faham@estia.fr
+				li j.legardeur@estia.fr
+				li d.masson@estia.fr
+
+			h3 Avant de partir
+			p.
+				Pour faciliter l'étude statistique des informations rempli par les participants, pourriez vous compléter les informations suivante. 
+
+			.row
+				.input-field.col.s12.m12.l6
+					input( id="first_name" name="prenom" type="text" class="validate" placeholder="")
+					label( for="first_name" ) Prénom
+				.input-field.col.s12.m12.l6
+					input( id="last_name"  name="nom" type="text" class="validate"  placeholder="")
+					label( for="last_name" ) Nom
+			.row
+				.input-field.col.s12.l6
+					.row.radioGroup
+						label Sexe 
+						span.col.l4.m4.s12 
+							input( type="radio", name="sex", id="sexe_masculin"  value="male") 
+							label( for="sexe_masculin" ) Masculin
+						span.col.l4.m4.s12
+							input( type="radio", name="sex", id="sexe_feminin"  value="female" ) 
+							label( for="sexe_feminin" ) Féminin
+						span.col.l4.m4.s12
+							input( type="radio", name="sex", id="sexe_autre_na"   value="na") 
+							label( for="sexe_autre_na" ) Autre
+				.input-field.col.s12.l6
+					select( name="ageRange" )
+						option( disabled, selected ) Renseignez votre age
+						option( value="17") moins de 18 ans
+						option( value="18") 18-25 ans
+						option( value="25") 25-35 ans
+						option( value="35") 35-45 ans 
+						option( value="45") 45-55 ans
+						option( value="55") plus de 55 ans
+					label Tranche d'âge
+			.row
+				.input-field.col.s12.l6
+					select( name="lastDiploma")
+						option( disabled, selected ) Indiquez votre dernier diplôme obtenu
+						option( value="0") Aucun
+						option( value="1") Bac
+						option( value="2") Bac + 2
+						option( value="3") Bac + 3
+						option( value="5") Bac + 5
+						option( value="8") Bac + 8
+					label niveau d'études
+				.input-field.col.s12.l6
+					select( name="organism") 
+						option( disabled, selected ) A quelle organisme/profession appartenez vous ? 
+						option( value="GRE") Grande Entreprise (plus de 5000 employés)
+						option( value="ETI") ETI (250-4999 employés)
+						option( value="PME") PME (10-249 employés)
+						option( value="TPE") TPE ( moins de 10 employés)
+						option( value="SUP") Start-up
+						option( value="AUE") Auto-Entrepreneur
+						option( value="LAB") Laboratoire
+						option( value="ECO") Ecole
+						option( value="UNI") Université
+						option( value="ASS") Association
+						option( value="ONG") ONG
+						option( value="COL") Collectivité
+						option( value="SEP") Service Public
+						option( value="ETU") Etudiant
+						option( value="RET") Retraité
+						option( value="SEM") Sans Emploi
+						option( value="AUT") Autre
+					label Type d'organisme-Profession				
+			.row
+				button.btn.waves-effects.waves-light.col.m6.offset-m3.s12( href="/form", type="submit") Terminer
+			include ./cnil.pug
