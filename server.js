@@ -43,6 +43,7 @@ app.get( '/', renderLoginPage ) ;
 app.get( '/callback',  passport.authenticate('auth0', { failureRedirect: '/' }), register ) ;
 
 app.get( '/splash', checkAuthentication, renderStartUpPage ) ; 
+app.get( '/intro'  , checkAuthentication, renderIntro ) ; 
 app.get( '/form'  , checkAuthentication, renderFormPage ) ; 
 app.get( '/final'  , checkAuthentication, renderFinalPage ) ; 
 
@@ -160,6 +161,10 @@ function renderStartUpPage( requete, reponse ) {
   reponse.render( "splash", {user : requete.decoded} ) ;
 }
 
+function renderIntro( requete, reponse ) {
+  console.log( requete.decoded )
+  reponse.render( "splash2", {user : requete.decoded} ) ;
+}
 
 
 //================================================================
@@ -225,7 +230,7 @@ function processValidationCb( connection, data, requete, reponse ) {
 //Remerciement
 //================================================================
 function renderFinalPage( requete, reponse ) {
-  reponse.render( "final", requete.decoded ) ;
+  reponse.render( "final", { dialoJUser : requete.decoded, socialNetworkUser : requete.user } ) ;
 }
 
 //================================================================
