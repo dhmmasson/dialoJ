@@ -29,7 +29,7 @@ requirejs(['jquery', 'materialize', 'jqueryui/ui/sortable'],
   function () {
     $('#dialogie').submit( traitementFormulaire );    
     $("select").material_select()   
-    $("#completeProfile").submit( completeProfile ) ;
+    // $("#completeProfile").submit( completeProfile ) ;
 
 
 
