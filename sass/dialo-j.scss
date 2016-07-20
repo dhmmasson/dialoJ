@@ -32,7 +32,6 @@ body {
   background-color : $secondary-color;
   color : white ; 
 }
-
 nav {
   background-color : transparent !important ;
   margin-bottom: 0px !important ;
@@ -51,9 +50,13 @@ img.clip {
   display: block ;
   
 }
+.input-field:not(.radioGroup) label {
+  color : $secondary-color !important;
+}
 .radioGroup{
   label {
     position: absolute;
+    color : black ; 
     top: -14px;
     font-size: 0.8rem;
   } 
