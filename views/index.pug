@@ -15,7 +15,15 @@ block content
 						each dialogie in dialogies 
 							if dialogie.categorie_id == categorie.id
 								div.collection-item.row
-									p.title= dialogie.description 
+									p.title
+										i= dialogie.position +"."
+										-
+											var desc = dialogie.description.replace( /(%s)|(%n)/gi, 
+														function( match, p1, p2 ) { 
+															if( p1 ) return "<span class='bold'>" + dialogie.southPole + "</span>"; 
+															if ( p2 ) return "<span class='bold'>" + dialogie.northPole + "</span>"; 
+														} )
+										span!= desc 
 									.range-field.row
 										.col.s2
 											h5.right-align= dialogie.southPole

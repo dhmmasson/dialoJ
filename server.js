@@ -113,9 +113,18 @@ function checkAuthentication(requete, reponse, next) {
   var token = requete.body.token || requete.query.token || requete.headers['x-access-token'] || requete.cookies.token;
   requete.token = token ; 
   // decode token
-    
-  //next() ;
-  //return 
+  if( process.env.LOCAL == "true" ) {
+    requete.decoded = { user : {
+      nom :    "dm"
+    , prenom : "dd"
+    , email  : "1"
+    , auth0_id : "1"
+    , displayName :"dddm"
+    , id : 2 
+    }}
+    next() ;
+    return 
+  }
   if (token) {
     // verifies secret and checks exp
     jwt.verify(token, app.get('secret'), wrapProcess( authenticationValid, authenticationInvalid, requete, reponse, next ));
@@ -165,7 +174,7 @@ function renderIntro( requete, reponse ) {
 
 //Get the latest dialogies and render the form
 function renderFormPage( requete, reponse ) {
-  var sql = "SELECT dialogie.id, dialogie.description as description, southPole, northPole, categorie_id, categorie.description as categorie_description" + "\n"
+  var sql = "SELECT dialogie.id, dialogie.description as description, southPole, northPole, categorie_id, categorie.description as categorie_description, position" + "\n"
           + "FROM   dialogie" + "\n"
           + "JOIN   categorie ON categorie_id = categorie.id "
           + "WHERE  version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + ";\n"
@@ -194,7 +203,7 @@ function processValidation( requete, reponse ) {
   var votes    = JSON.parse( requete.body.values ) 
     , metriques = JSON.parse( requete.body.metriques )
     , user_id   = requete.decoded.user.id ; 
-
+  console.log( votes, metriques )
   for( var i = 0 ; i < votes.length ; i ++ ){
     value = votes[ i ]
     votes[ i ] = [ value.dialogie_id, user_id, value.value ] 
@@ -209,6 +218,7 @@ function processValidation( requete, reponse ) {
     sql += "INSERT INTO evaldialogie( dialogie_id, metrique_id, user_id, value ) VALUES ? \n" ;
     values.push( metriques )
   }  
+  console.log( sql, values )
   sqlPooled( {sql : sql, values : values }, processValidationCb, requete, reponse ) 
 }
 function processValidationCb( connection, data, requete, reponse ) {  
