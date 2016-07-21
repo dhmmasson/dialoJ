@@ -1,5 +1,8 @@
 extends ./layout.pug
 block content 
+	.row
+		.col.s12.l10.offset-l1.main.center-align 
+			h4 Comment chacun d'entre vous (citoyens, entreprises, chercheurs, professeurs, étudiants …) peut-il contribuer à la soutenabilité du territoire ?
 	.row.onglets 
 		.col.s12.l10.offset-l1
 			ul.tabs
@@ -10,7 +13,6 @@ block content
 		form.col.s12.l10.offset-l1.main.z-depth-1#dialogie( method="POST")
 			each categorie, index  in categories 
 				.col.s12( id="cat_"+categorie.id )
-					h5= "catégorie : " + categorie.description 
 					div.collection
 						each dialogie in dialogies 
 							if dialogie.categorie_id == categorie.id

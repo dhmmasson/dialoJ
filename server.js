@@ -158,12 +158,12 @@ function authenticationValid(requete, reponse, next, decoded ) {
 //================================================================
 
 function renderStartUpPage( requete, reponse ) {
-  console.log( requete.decoded )
+  //console.log( requete.decoded )
   reponse.render( "splash",  requete.decoded ) ;
 }
 
 function renderIntro( requete, reponse ) {
-  console.log( requete.decoded )
+  //console.log( requete.decoded )
   reponse.render( "splash2", requete.decoded ) ;
 }
 
@@ -203,7 +203,7 @@ function processValidation( requete, reponse ) {
   var votes    = JSON.parse( requete.body.values ) 
     , metriques = JSON.parse( requete.body.metriques )
     , user_id   = requete.decoded.user.id ; 
-  console.log( votes, metriques )
+  //console.log( votes, metriques )
   for( var i = 0 ; i < votes.length ; i ++ ){
     value = votes[ i ]
     votes[ i ] = [ value.dialogie_id, user_id, value.value ] 
@@ -218,7 +218,7 @@ function processValidation( requete, reponse ) {
     sql += "INSERT INTO evaldialogie( dialogie_id, metrique_id, user_id, value ) VALUES ? \n" ;
     values.push( metriques )
   }  
-  console.log( sql, values )
+  //console.log( sql, values )
   sqlPooled( {sql : sql, values : values }, processValidationCb, requete, reponse ) 
 }
 function processValidationCb( connection, data, requete, reponse ) {  
