@@ -29,10 +29,11 @@ body {
 
 h4.adjustable {
   &:before {
-    content: "thematique";
-    position:absolute ; 
-    top: 0; 
-    left: 0; 
+    content: "thematique :";
+    position: absolute;
+    top: -1.5em;
+    left: -3em;
+
   }
   font-size: 14px;
   width: 80%;
