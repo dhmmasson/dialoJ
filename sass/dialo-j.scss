@@ -45,6 +45,21 @@ h4.adjustable {
 }
 
 
+.collapsible.targetProfile {
+  border : none ; 
+  box-shadow : none ; 
+  .collapsible-header {
+    span {
+      color : $secondary-color ;
+      font-size : 0.8em ; 
+    }
+    border-bottom : none ;
+  }
+  .collapsible-body {
+    border-bottom : none ;
+  }
+}
+
 .onglets {
   margin-bottom: 0 !important;
   .col {
