@@ -45,19 +45,20 @@ block content
 											ul.collapsible.targetProfile( data-collapsible="accordion" )
 												li
 													.collapsible-header.right 
-														span Pour cette aspect je cherche des partenaires avec un profil particulier...
+														span Sur ce point, je cherche un profil de personne particulier 
+														span.caret ▼
 													.row.collapsible-body
 														.div.col.s12
 															span= metrique.description
 														.div.col.s4
 															input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_sim", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="-1")
-															label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_sim" )= "similaire"
+															label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_sim" )= dialogie.southPole
 														.div.col.s4
 															input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_que", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="0", checked)
 															label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_que" )= "quelconque"
 														.div.col.s4
 															input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_opp", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="1")
-															label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_opp" )= "opposé/complémentaire"
+															label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_opp" )= dialogie.northPole
 					if index == categories.length - 1 
 						button.btn.waves-effect.waves-light.right( type="submit")
 							i.material-icons.left done

@@ -28,6 +28,12 @@ body {
 }
 
 h4.adjustable {
+  &:before {
+    content: "thematique"
+    position:absolute ; 
+    top: 0; 
+    left: 0; 
+  }
   font-size: 14px;
   width: 80%;
   line-height: 150%; 
