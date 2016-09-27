@@ -1,8 +1,8 @@
 extends ./layout.pug
+block navigation
+	h4.right.adjustable
+		span( style="font-size: "+Math.round( 100 * ( 1 + thematique.length/100 ) )+"%")= thematique
 block content 
-	.row
-		.col.s12.l10.offset-l1.main.center-align 
-			h4 Comment chacun d'entre vous (citoyens, entreprises, chercheurs, professeurs, étudiants …) peut-il contribuer à la soutenabilité du territoire ?
 	.row.onglets 
 		.col.s12.l10.offset-l1
 			ul.tabs
@@ -29,15 +29,31 @@ block content
 									.range-field.row
 										.col.s2
 											h5.right-align= dialogie.southPole
-										.col.s8
+										.col.s8.dialoJ-range
 											input( type="range", min=1, max=7, name="dialogie_"+dialogie.id+"_value" ) 		
 										.col.s2
 											h5.left-align= dialogie.northPole
-									p.row
-										each metrique in metriques
-											.div.col.s6
-												input( type="checkbox", id="check_"+dialogie.id+"_"+metrique.id, name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value=1)
-												label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id )= metrique.description
+								
+									each metrique in metriques
+										if metrique.type == "boolean"
+											.row
+												.div.col.s6
+													input( type="checkbox", id="check_"+dialogie.id+"_"+metrique.id, name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value=1)
+													label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id )= metrique.description
+										if metrique.type == "similarity"
+											.row
+												.div.col.s12
+													span= metrique.description
+											.row 
+												.div.col.s4
+													input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_sim", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="-1")
+													label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_sim" )= "similaire"
+												.div.col.s4
+													input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_que", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="0", checked)
+													label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_que" )= "quelconque"
+												.div.col.s4
+													input( type="radio", id="check_"+dialogie.id+"_"+metrique.id+"_opp", name="dialogie_"+dialogie.id+"_metrique_"+metrique.id, value="1")
+													label.filled-in-box( for="check_"+dialogie.id+"_"+metrique.id+"_opp" )= "opposé/complémentaire"
 					if index == categories.length - 1 
 						button.btn.waves-effect.waves-light.right( type="submit")
 							i.material-icons.left done
@@ -47,3 +63,4 @@ block content
 		form#hiddenForm( method="POST" action="/validation")
 			input#valuesToSend( type="hidden" name="values" )
 			input#metriquesToSend( type="hidden" name="metriques" )
+

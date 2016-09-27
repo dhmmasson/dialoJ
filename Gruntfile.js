@@ -1,12 +1,13 @@
 module.exports = function(grunt) {
   grunt.initConfig(
-  { sass: {
-      dist: {
-        files: 
-        { 'dist/css/dialo-j.css': '.grunt/sass/dialo-j.scss'      
-        }
+  { pkg: grunt.file.readJSON('package.json')
+  , sass: {
+    dist: {
+      files: 
+      { 'dist/css/dialo-j.css': '.grunt/sass/dialo-j.scss'      
       }
     }
+  }
   , copy: 
     { materializeFont : 
       { files: [ { expand: true
@@ -41,10 +42,24 @@ module.exports = function(grunt) {
                   , dest: "dist/scripts"
                   } ]
       }
-    }    
-});
+    }  
+    , watch: {
+      css : {
+        files: ['sass/**']
+      , tasks: ['copy:dialoJSass', 'sass']
+      }
+    , js : {
+      files:  ['dev-scripts/**']
+      , tasks: ['copy:dialoJScripts']
+      } 
+    }  
+  });
+  grunt.event.on('watch', function(action, filepath, target) {
+    grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+  });
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');  
   grunt.registerTask('default', ['copy', 'sass']);
 
 };

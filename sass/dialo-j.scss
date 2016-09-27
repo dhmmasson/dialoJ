@@ -16,7 +16,34 @@ $input-bg-color: $primary-color;
 
 body {
 	background : #eee ; 
+
+  
 }
+
+@media only screen and (max-width: 992px){
+  body nav .brand-logo {
+     left:0; 
+    transform: none ; 
+  } 
+}
+
+h4.adjustable {
+  font-size: 14px;
+  width: 80%;
+  line-height: 150%; 
+}
+@media only screen and (max-width: 1550px){
+  h4.adjustable {
+    font-size: calc(1vw);
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 992px){
+  h4.adjustable {
+    font-size: calc(1.5vw);
+  }
+}
+
 
 .onglets {
   margin-bottom: 0 !important;
@@ -72,6 +99,44 @@ p.title {
     font-size: 1.5rem;
   }
 }
+.no-Vmargin{
+  margin-top: 0 !important ; 
+  margin-bottom: 0 !important; 
+}
+.small-VPading {
+  padding-top: 2px !important; 
+  padding-bottom : 2px !important;
+}
+
+.accent_0 {
+  font-size:  0.7em;
+  font-weight: font-weight 200 ;
+}
+.accent_1 {
+  font-size:  0.8em;
+  font-weight: font-weight 300 ;
+}
+.accent_2 {
+  font-size:  0.9em;
+  font-weight: font-weight 400 ;
+}
+.accent_3 {
+  font-size:  1em;
+  font-weight: font-weight 400 ; ;
+}
+.accent_4 {
+  font-size:  1.1em;
+  font-weight: font-weight 400 ;
+}
+.accent_5 {
+  font-size:  1.2em;
+  font-weight:  500;
+}
+.accent_6 {
+  font-size:  1.3em;
+  font-weight: 600;
+}
+
 p.justified {
   text-align:justify;
 }
@@ -121,13 +186,13 @@ body #a0-lock.a0-theme-default {
 
 
 /***************
-      Range
-      ***************/
+Range
+***************/
 
       .range-field {
         position: relative;
       }
-
+.dialoJ-range {
       input[type=range], input[type=range] + .thumb {
         @extend .no-select;
         cursor: pointer;
@@ -320,4 +385,5 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
   background: #ccc;
+}
 }

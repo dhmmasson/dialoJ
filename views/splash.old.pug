@@ -1,0 +1,49 @@
+extends ./layout.pug
+block content 
+	.row
+		.main.col.s12.l10.offset-l1.z-depth-1
+			h2.center-align= "Bienvenue " + user.displayName
+			p.justified 
+				span Bonjour, dans le cadre des travaux de thèse de 
+				span.bold Jérémie Faham 
+				span nous avons retenu des profils intéressants afin de participer à l’évaluation de 
+				span.brand DialoJ
+				span , un outil qui vous sera utile pour préparer et décider de participer à des événements de networking. 
+				span Cette évaluation vous prendra 10 min.
+			p
+				span.brand DialoJ 
+				span se base sur la résolution de 34 dialogies. 
+				span.
+					Les dialogies servent à exprimer les relations à la fois complémentaires et antagonistes entre deux orientations à priori opposées mais pas nécessairement incompatibles. 
+					Cette phase de résolution qui sera proposée en amont d’événements de networking permet de recueillir les attentes, les objectifs et les valeurs des participants potentiels au regard de la thématique qui sera abordée au cours de l’événement.	Pour chaque dialogie vous devez vous positionner sur le slider coloré et dynamique.
+			p
+				span.bold Exemple: lors de mes prochaines vacances vous opterez pour un séjour à la plage ou plutôt à la montagne ? 
+			div.center-align
+				img.clip( src="/img/videoDialogie_2.gif" )
+				span.italic Cliquez pour vous exprimer votre orientation.				
+			p.
+				Le but est de vous permettre d’exprimer les objectifs que vous souhaitez poursuivre lors de l’événement. 
+				Tous les participants répondent aux mêmes questions. Puis chacun reçoit un feedback personnalisé contenant son profil ainsi que des indicateurs permettant de qualifier l’intérêt de participer à cet événement.
+			p
+				span Il s’agit d’une première version de 
+				span.brand DialoJ
+				span . Nous testons la phase « résolution des dialogies » uniquement. Nous souhaitons simuler un premier événement dont vous seriez les participants potentiels. La thématique de cet événement est : 
+			h5= thematique
+			p
+				span Vous répondrez à chaque question selon vos orientations par rapport cette thématique. 
+			p
+				span Dans le cadre de cette évaluation vous avez en plus la possibilité de cocher en dessous de chaque question l’une ou plusieurs des 4 propositions suivantes : 
+			ul.browser-default
+				li J’ai eu du mal à comprendre cette question.  
+				li Aucune des deux propositions ne reflète ma situation.  
+				li J’ai l’impression d’avoir déjà répondu à cette question.  
+				li Je ne me sens pas à l’aise pour répondre à cette question. 			
+			p.bold.
+				Exemple: Cette année pour vos vacances d’été, vous opterez pour un séjour à la plage ou plutôt à la montagne ? (si vous avez déjà posé tous vos congés, vous ne partirez malheureusement pas en vacances cet été … désolé .  Vous cocherez donc la case : « Aucune des deux propositions ne reflète ma situation »)	
+			.center-align
+				img.clip( src="/img/videoDialogie_1.gif" )
+				span.italic vous avez en plus la possibilité de cocher en dessous de chaque question l’une ou plusieurs des 4 propositions.
+			p.
+				Merci pour votre contribution !
+			.row
+				a.btn.waves-effects.waves-light.col.m6.offset-m3.s12( href="/intro" ) Entrer dans l'outil

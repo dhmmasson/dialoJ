@@ -1,0 +1,36 @@
+.col.s12.l10.offset-l1.main.z-depth-1#users
+	.row.onglets 
+		.col.s12
+			ul.tabs
+				each user in users 
+					li.tab.col.s2
+						a( id="user_tab_" + user.id,  href="#usr_pan_"+user.id )= user.nom 
+	.row
+		.col.s12
+			each user  in users 
+				.col.s12( id="usr_pan_"+user.id  )
+					div.row 
+						span.col.m2.s6= ((user.sex == "male") ? "M. " : "Mme. " )+ user.prenom + " " + user.nom					
+						span.col.m2.s6= "diplome bac +" + user.lastDiploma
+						span.col.m2.s6= "organisme " + user.organism
+
+					div.collection
+						each vote in votes
+							if vote.user_id == user.id 
+								.collection-item.row.small-Vpadding.valign-wrapper.dialoJ-range
+									-	
+										southPoleFont = "accent_"+(7 - vote.value ); 
+										northPoleFont = "accent_"+(vote.value - 1 );
+										evalId = ["utilité", "", "compréhension", "situation", "redondance", "mal à l'aise"]
+									span.col.s4.right-align.valign( class=southPoleFont )= vote.southPole
+									input.col.s2.offset-s1.center-align.no-Vmargin( type="range" , min=1, max=7, value= vote.value )
+									span.col.s4.offset-s1.valign( class=northPoleFont )= vote.northPole
+									if vote.evalsID	
+										- 
+											var metriques =  vote.evalsID.split(",") ;
+											var badge = ""
+											for( var i in metriques ) {
+												badge += evalId[ metriques[i] ] + ", "
+											}											
+											badge = badge.slice(0,-2)
+										span.badge.red-text= badge

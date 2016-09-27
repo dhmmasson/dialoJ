@@ -1,0 +1,38 @@
+.col.s12.l10.offset-l1.main.z-depth-1#audio
+	//- input( type="file" id="audioFileInput")
+	//- audio#audioPlayer( autoplay=true, controls  )
+	//- input( type="textarea")
+	//- script.
+	//- 	var inputElement = document.getElementById("audioFileInput");
+	//- 	inputElement.addEventListener("change", processAudio, false);
+	//- 	function processAudio( e ) {
+	//- 		var selectedFile = inputElement.files[0]
+	//- 			, audioPlayer = document.getElementById("audioPlayer")
+	//- 			,	obj_url = window.URL.createObjectURL(selectedFile);
+	//- 		console.log( obj_url  )
+	//- 		audioPlayer.src = obj_url
+	//- 		audioPlayer.play()
+	//- 		//window.URL.revokeObjectURL(obj_url);
+			
+	//- 		//- var reader = new FileReader();
+	//- 		//- reader.onload = function( event ) {
+	//- 		//- 	audioPlayer = document.getElementById("audioPlayer");
+	//- 		//- 	console.log( audioPlayer)
+	//- 		//- 	//audioPlayer.src = event.target.result
+	//- 		//- 	audioPlayer.play()
+	//- 		//- 	window.URL.revokeObjectURL(obj_url);
+	//- 		//- }
+	//- 		//- reader.readAsDataURL(selectedFile);
+	//- 	}
+	div.collection
+		each dialogie in dialogies
+			-
+				var desc = dialogie.description.replace( /(%s)|(%n)/gi, 
+							function( match, p1, p2 ) { 
+								if( p1 ) return "<span class='bold'>" + dialogie.southPole + "</span>"; 
+								if ( p2 ) return "<span class='bold'>" + dialogie.northPole + "</span>"; 
+							} )
+			.collection-item.row.small-VPading 
+					p.no-Vmargin 
+						i.left= dialogie.position 
+						span!= desc

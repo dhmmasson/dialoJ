@@ -1,0 +1,16 @@
+.col.s12.l10.offset-l1.main.z-depth-1#dialogie
+	div.collection
+		each dialogie in dialogiesTab
+			-
+				var desc = dialogie.description.replace( /(%s)|(%n)/gi, 
+							function( match, p1, p2 ) { 
+								if( p1 ) return "<span class='bold'>" + dialogie.southPole + "</span>"; 
+								if ( p2 ) return "<span class='bold'>" + dialogie.northPole + "</span>"; 
+							} )
+			.collection-item.row
+					h5 
+						i.left= dialogie.position 
+						span!= desc
+					each metrique in dialogie.metrique
+						.row= metrique.description + "  " + metrique.value 
+

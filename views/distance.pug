@@ -1,0 +1,41 @@
+.col.s12.main#distance
+	.row 
+		.col.s12.m6
+			.row 
+				each categorie, index in categories 
+					div.collection.col.s6
+						div.collection-item.row
+							.col.s7 
+								span.accent_6= categorie.description
+							.col.s3.range-field
+								input.categoryRange( type="range" min="-3" max="3" value=1, data-category=categorie.id, data-label="#label_category_"+categorie.id )
+							.col.s2 
+								span.accent_0( id="label_category_"+categorie.id ) similaire
+						ul.collapsible 
+							li 
+								.collapsible-header see more
+								.collapsible-body
+									each dialogie in dialogies 
+										if dialogie.categorie_id == categorie.id
+											div.collection-item.row
+												.col.s7 
+													i.left= dialogie.position
+													span.accent_0= dialogie.southPole + " / " + dialogie.northPole 
+												.col.s3.range-field
+													input.dialogieRange( id="dialogie_"+dialogie.id type="range" min="-4" max="4" value=1, data-category=categorie.id data-label="#label_dialogie_"+dialogie.position)
+												.col.s2 
+												span.accent_0( id="label_dialogie_"+dialogie.position ) similaire
+		.col.s12.m12
+			.row.onglets 
+				.col.s12
+					ul.tabs
+						each user in users
+							li.tab.col.s2
+								a( id="user_distance_tab_" + user.id,  href="#usr_distance_pan_"+user.id )= user.nom 
+			.row
+				.col.s12
+					each user in users 
+						.row( id="usr_distance_pan_"+user.id) 
+			.row
+				#chartdiv( style="width: 100%; height: 800px; font-size:pt")
+				

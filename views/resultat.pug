@@ -1,0 +1,46 @@
+extends ./layout.pug
+block content 
+	-
+		var dialogiesTab = {} ;
+		for( var i in evals  ){
+			var dialogie = evals[i] 
+			, dialogie_id = dialogie.dialogie_id 
+			if( dialogiesTab[ dialogie_id ] == undefined ) {
+				dialogiesTab[ dialogie_id ] = { description : dialogie.dialogie
+																			, position : dialogie.position
+																			, southPole : dialogie.southPole 
+																			, northPole : dialogie.northPole } ;
+
+				dialogiesTab[ dialogie_id ].metrique = {} ;
+				dialogiesTab[ dialogie_id ].metrique[ dialogie.metrique_id ] = {
+					value : 1
+				, description : dialogie.metrique }
+			} else { 
+				if( dialogiesTab[ dialogie_id ].metrique[ dialogie.metrique_id ] == undefined ) {
+					dialogiesTab[ dialogie_id ].metrique[ dialogie.metrique_id ] = {
+						value : 0
+					, description : dialogie.metrique }
+				}
+				dialogiesTab[ dialogie_id ].metrique[ dialogie.metrique_id ].value += 1 
+			}
+		}
+
+	script!= "var data= " + json +" ; dialOgie= " + JSON.stringify( dialogiesTab ) 
+	script= "setTimeout( 1000, function() {calculDistance( data[ 2 ], data[ 0 ] ) } )"  
+	.row.onglets 
+		.col.s12.l10.offset-l1
+			ul.tabs
+				li.tab.col.s2
+					a( href="#users" ) utilisateurs
+				li.tab.col.s2
+					a( href="#dialogie" ) dialogie
+				li.tab.col.s2
+					a( href="#distance" ) distance	
+				li.tab.col.s2
+					a.active( href="#audio" ) audio	 
+	.row
+		include user
+		include dialogie
+		include distance
+		include audio
+										

@@ -32,7 +32,7 @@ app.use( bodyParser.json() );                         // for parsing application
 app.use( bodyParser.urlencoded({ extended: true }) ); // for parsing application/x-www-form-urlencoded
 app.use( express.static( 'dist' ) );                  // serve static files from the distribution folder
 app.use( '/scripts/lib/', express.static( 'bower_components' ) ); //Serve static javacript libs
-
+  
 app.set('view engine', 'pug');
 
 http.listen( config.port, successListen );
@@ -42,9 +42,9 @@ app.get( '/', renderLoginPage ) ;
 
 app.get( '/callback',  passport.authenticate('auth0', { failureRedirect: '/' }), register ) ;
 
-app.get( '/splash', checkAuthentication, renderStartUpPage ) ; 
-app.get( '/intro'  , checkAuthentication, renderIntro ) ; 
-app.get( '/form'  , checkAuthentication, renderFormPage ) ; 
+app.get( '/splash',  checkAuthentication, getStartUpPage ) ; 
+app.get( '/intro'  , checkAuthentication, getIntro ) ; 
+app.get( '/form'  ,  checkAuthentication, renderFormPage ) ; 
 app.get( '/final'  , checkAuthentication, renderFinalPage ) ; 
 
 //TODO : Reactivate when admin stuff is ok
@@ -53,6 +53,7 @@ app.get( '/install/:filename', getInstallDialogie  )
 app.post( '/validation', checkAuthentication, upload.array(), processValidation )
 
 app.get( '/remerciment', checkAuthentication, upload.array(), renderFinalPage ) ; 
+app.get( '/resultat', affichageResultat ) ; 
 app.post( "/completeProfile", checkAuthentication, completeProfile ) ; 
 //================================================================
 //Login et register
@@ -156,15 +157,32 @@ function authenticationValid(requete, reponse, next, decoded ) {
 //================================================================
 //Startup PAGE
 //================================================================
-
-function renderStartUpPage( requete, reponse ) {
-  //console.log( requete.decoded )
-  reponse.render( "splash",  requete.decoded ) ;
+function getStartUpPage( requete, reponse ) {
+  var sql = "SELECT id, description"+ "\n"
+          + "FROM   thematique" + "\n"     
+          + "WHERE  id = ( SELECT MAX( id ) FROM thematique LIMIT 1 )" + ";\n"  
+  sqlPooled( { sql : sql }, renderStartUpPage, requete, reponse ) ; 
 }
 
-function renderIntro( requete, reponse ) {
+function renderStartUpPage( connection, data ,requete, reponse ) {
+  
+  requete.decoded.thematique = data[0].description 
+  reponse.render( "splash", requete.decoded ) ;
+  connection.release()
+}
+
+function getIntro( requete, reponse ) {
+  var sql = "SELECT id, description"+ "\n"
+          + "FROM   thematique" + "\n"     
+          + "WHERE  id = ( SELECT MAX( id ) FROM thematique LIMIT 1 )" + ";\n"  
+  sqlPooled( { sql : sql }, renderIntro, requete, reponse ) ; 
+}
+
+function renderIntro( connection, data, requete, reponse ) {
   //console.log( requete.decoded )
+  requete.decoded.thematique = data[0].description 
   reponse.render( "splash2", requete.decoded ) ;
+  connection.release()
 }
 
 
@@ -182,12 +200,17 @@ function renderFormPage( requete, reponse ) {
           + "FROM   metrique" + "\n"
           + "WHERE  version = ( SELECT MAX( version ) FROM metrique LIMIT 1 )" + ";\n"
           + "SELECT id, description"+ "\n"
-          + "FROM   categorie" + "\n"          
+          + "FROM   categorie" + ";\n"
+          + "SELECT id, description"+ "\n"
+          + "FROM   thematique" + "\n"     
+          + "WHERE  id = ( SELECT MAX( id ) FROM thematique LIMIT 1 )" + ";\n"         
   sqlPooled( { sql : sql }, processrenderFormPage, requete, reponse ) ; 
 }
 //Render the page using the data from the db
 function processrenderFormPage( connection, data, requete, reponse ) {  
-  reponse.render( "index",  { dialogies : data[0]
+    console.log( data[ 3 ])
+  reponse.render( "index",  { thematique : data[3][0].description
+                            , dialogies : data[0]
                             , metriques : data[1]  
                             , categories : data[2]  
                             , token     : requete.token 
@@ -227,6 +250,48 @@ function processValidationCb( connection, data, requete, reponse ) {
   reponse.redirect("/remerciment")
 }
 
+
+//================================================================
+//Remerciement
+//================================================================
+function affichageResultat( requete, reponse ) {
+  
+  var sql = "SELECT dialogie.id as dialogie_id ,  dialogie.description as description, southPole, northPole, vote.user_id as user_id, vote.value,  GROUP_CONCAT(DISTINCT evaldialogie.metrique_id ORDER BY evaldialogie.metrique_id DESC SEPARATOR ',') as evalsID" + "\n"
+          + "FROM vote "+ "\n"
+          + "LEFT JOIN evaldialogie ON evaldialogie.dialogie_id = vote.dialogie_id AND evaldialogie.user_id = vote.user_id "   + "\n"   
+          + "JOIN dialogie ON dialogie.id = vote.dialogie_id "+ "\n"
+          + "WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + "\n"
+          + "GROUP BY vote.id "+ "\n"
+          + "ORDER BY user_id, dialogie_id "+ "\n"
+          + "; " + "\n"
+  var sql1 = "SELECT dialogie_id, southPole, northPole, position, dialogie.description as dialogie, metrique.description as metrique, metrique_id, value " + "\n"
+          + "FROM evaldialogie " + "\n"
+          + "JOIN metrique ON metrique.id = metrique_id " + "\n"
+          + "JOIN dialogie ON dialogie.id = dialogie_id "+ "\n"
+          + "WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + "\n"
+          + "ORDER BY user_id, dialogie_id " + "\n"
+          + "; " + "\n"
+  var sql2 = "SELECT user.* " + "\n"
+          + "FROM vote "+ "\n"
+          + "JOIN user ON user.id = user_id "+ "\n"
+          + "JOIN dialogie ON dialogie.id = dialogie_id "+ "\n"
+          + "WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + "\n"
+          + "GROUP BY user_id "+ "\n"
+          + "; " + "\n"
+  var sql3 = "SELECT * FROM metrique WHERE  version = ( SELECT MAX( version ) FROM metrique LIMIT 1 ) ;"
+  var sql4 = "SELECT id, description FROM categorie ;"
+  var sql5 = "SELECT id, dialogie.description as description, southPole, northPole, categorie_id, position" + "\n"
+          + "FROM   dialogie" + "\n"        
+          + "WHERE  version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + ";\n"
+  sqlPooled( {sql : sql + sql1 +sql2 + sql3 + sql4 + sql5  }, renderAfficheResultat, requete, reponse ) 
+
+}
+
+function renderAfficheResultat( connection, data, requete, reponse ) {
+  connection.release() ; 
+  reponse.render( "resultat", {json : JSON.stringify (data ), votes : data[0], users : data[2], evals : data[1], metriques : data[3], categories : data[4], dialogies : data[5]  })
+
+}
 
 //================================================================
 //Remerciement
@@ -281,6 +346,8 @@ function renderInstallDialogie( connection, data, requete, reponse ) {
   reponse.json( {success : true, data : data })
 
 }
+
+
 
 
 //================================================================

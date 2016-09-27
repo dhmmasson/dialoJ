@@ -20,6 +20,7 @@
     "requirejs": "^2.2.0",
     "jquery": "^3.0.0",
     "jquery-ui": "jqueryui#^1.11.4",
-    "auth0-lock": "^9.2.1"
+    "auth0-lock": "^9.2.1",
+    "amcharts3": "^3.20.12"
   }
 }
