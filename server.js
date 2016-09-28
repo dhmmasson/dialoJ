@@ -137,6 +137,7 @@ function checkAuthentication(requete, reponse, next) {
 }
 
 function noTokenFound( requete, reponse ) {
+  return reponse.redirect("/")
   return reponse.status(403).send({ 
         success: false, 
         message: 'No token provided.' 
@@ -144,7 +145,7 @@ function noTokenFound( requete, reponse ) {
 }
 
 function authenticationInvalid( err, requete, reponse, next ) {
-
+  return reponse.redirect("/")
   return reponse.status(403).json({ success: false, message: 'Failed to authenticate token.' + err.message });    
 }
 
