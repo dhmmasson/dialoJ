@@ -29,14 +29,13 @@ body {
 
 h4.adjustable {
   &:before {
-    content: "thematique :";
+    content: "thematique : ";
     position: absolute;
     top: -1.5em;
-    left: -3em;
-
+    
   }
   font-size: 14px;
-  width: 80%;
+  position:relative ;
   line-height: 150%; 
 }
 @media only screen and (max-width: 1550px){
