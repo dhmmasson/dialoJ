@@ -110,7 +110,8 @@ function finishRegistration( requete, reponse ){
   sqlPooled( { sql : sql }, redirectFnRegistraton, requete, reponse ) ;
 }
 function redirectFnRegistraton( requete, reponse, rows ) {
-  if( rows[0].count > 0  )
+  console.log( rows )
+  if( rows.count > 0  )
     reponse.redirect('/feedback')
   else   
     reponse.redirect('/splash')
