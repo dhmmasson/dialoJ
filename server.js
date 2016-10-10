@@ -109,9 +109,9 @@ function finishRegistration( requete, reponse ){
   var sql = "select count( value ) as count from evaldialogie where evaldialogie.user_id = " + requete.dialoJ_user.id
   sqlPooled( { sql : sql }, redirectFnRegistraton, requete, reponse ) ;
 }
-function redirectFnRegistraton( requete, reponse, rows ) {
+function redirectFnRegistraton( connection, rows, requete, reponse) {
   console.log( rows )
-  if( rows.count > 0  )
+  if( rows[0].count > 0  )
     reponse.redirect('/feedback')
   else   
     reponse.redirect('/splash')
