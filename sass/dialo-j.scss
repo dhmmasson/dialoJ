@@ -17,14 +17,14 @@ $input-bg-color: $primary-color;
 body {
 	background : #eee ; 
 
-  
+
 }
 
 @media only screen and (max-width: 992px){
   body nav .brand-logo {
-     left:0; 
-    transform: none ; 
-  } 
+   left:0; 
+   transform: none ; 
+ } 
 }
 
 h4.adjustable {
@@ -57,7 +57,7 @@ h4.adjustable {
   .collapsible-header {
     span {
       color : $secondary-color ;
-      font-size : 0.8em ; 
+      font-size : 1em ; 
     }
     border-bottom : none ;
   }
@@ -204,207 +204,21 @@ body #a0-lock.a0-theme-default {
 }
 
 }
+tr {
 
+  i:not(.gray) {
+    color:  $primary-color ; 
+  }
+  td:nth-child( 2 ) {
+    border-right : 1px solid rgba(0,0,0,0.1) ;
+  }
+}
 
 /***************
 Range
 ***************/
-
-      .range-field {
-        position: relative;
-      }
-.dialoJ-range {
-      input[type=range], input[type=range] + .thumb {
-        @extend .no-select;
-        cursor: pointer;
-      }
-
-      input[type=range] {
-        position: relative;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        width: 100%;
-        margin: 15px 0px;
-        padding: 0;
-      }
-      input[type=range] + .thumb {
-        position: absolute;
-        visibility: none ;
-        border: none;
-        height: 0;
-        width: 0;
-        border-radius: 0;
-        background-color: transparent;
-        top: 10px;
-        margin-left: -6px;
-
-        transform-origin: 50% 50%;
-        transform: rotate(-45deg);
-
-        .value {
-          display: block;
-          width: 30px;
-          text-align: center;
-          color: black;
-          font-size: 0;
-          transform: rotate(45deg);
-        }
-
-        &.active {
-          border-radius: 0;
-
-          .value {
-            visibility: hidden !important ;
-            color: $input-bg-color;
-            margin-left: -1px;
-            margin-top: 8px;
-            font-size: 10px;
-          }
-        }
-      }
+@import "./slider_3positions" ;
+@import "./slider_5positions" ;
+@import "./slider_resultat" ;
 
 
-      input[type=range]:focus {
-        outline: none;
-      }
-
-// WebKit
-input[type=range]{
-  -webkit-appearance: none;
-}
-
-input[type=range]::-webkit-slider-runnable-track {
-  height: 30px;
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: none;
-  height: 36px;
-  width: 14.3%;
-  border-color: black;
-  border: 3px solid black;
-  background-color: transparent;
-  transform-origin: 50% 50%;
-  margin: -3px 0 0 0;
-  transition: .3s;
-  border-radius : 0px ; 
-}
-
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-}
-
-// FireFox
-input[type=range]{
-  /* fix for FF unable to apply focus style bug  */
-  border: 1px solid white;
-
-  /*required for proper track sizing in FF*/
-}
-
-input[type=range]::-moz-range-track {
-  height: 30px;
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-}
-
-input[type=range]::-moz-range-thumb {
-  border: none;
-  height: 30px;
-  width: 14.3%;
-  border-color: black;
-  border: 3px solid black;
-  border-radius: 0;
-  background: black;
-  background-color: transparent;
-  transform-origin: 50% 50%;
-  margin-top: -3px;
-  border-radius: 0px ; 
-}
-
-/*hide the outline behind the border*/
-input[type=range]:-moz-focusring{
-  outline: 1px solid white;
-  outline-offset: -1px;
-}
-
-input[type=range]:focus::-moz-range-track {
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-}
-
-// IE 10+
-input[type=range]::-ms-track {
-  height: 30px;
-
-  /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-
-  /*leave room for the larger thumb to overflow with a transparent border */
-  border-color: transparent;
-  border-width: 6px 0;
-
-  /*remove default tick marks*/
-  color: transparent;
-}
-
-input[type=range]::-ms-fill-lower {
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  border: 5px solid black;
-}
-
-input[type=range]::-ms-fill-upper {
-  background: blue; /* For browsers that do not support gradients */
-  background: -webkit-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -o-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: -moz-repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  background: repeating-linear-gradient(-90deg, #fb8c00, #fb8c00 14.3%, #ffa726 14.4%, #ffa726 28.5%, #ffcc80 28.6%, #ffcc80 42.8%, #fff3e0  42.9%, #fff3e0 57.1%, #ffcc80 57.2%, #ffcc80 71.4%, #ffa726 71.5%, #ffa726 85.7%, #fb8c00 85.8%, #fb8c00 100%);
-  /*border: 5px solid black;*/
-}
-
-input[type=range]::-ms-thumb {
-  border: none;
-  height: 40px;
-  width: 14px;
-  border-radius: 0;
-  background: $radio-fill-color;
-}
-
-input[type=range]:focus::-ms-fill-lower {
-  background: #888;
-}
-
-input[type=range]:focus::-ms-fill-upper {
-  background: #ccc;
-}
-}

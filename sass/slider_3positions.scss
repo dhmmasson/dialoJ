@@ -1,0 +1,151 @@
+$height : 32px ; 
+.dialoJ-range {  
+  input.slider_3positions[type=range]:focus {
+    outline: none;
+  }  
+  input.slider_3positions[type=range]{
+    -webkit-appearance: none;
+  }
+
+
+
+  @mixin sliderBackground_3($color) {
+    $color1 : color($color, "darken-2") ;
+    $color2 : color($color, "base") ;
+    $color3 : color($color, "lighten-2") ;
+    $color4 : color($color, "lighten-4") ;
+
+    background: $color1 ; 
+    background: -webkit-repeating-linear-gradient(-90deg, $color1, $color1  14.3%, $color2 14.4%, $color2 28.5%, $color3 28.6%, $color3 42.8%, $color4  42.9%, $color4 57.1%, $color3 57.2%, $color3 71.4%, $color2 71.5%, $color2 85.7%, $color1  85.8%, $color1 100%);
+    background: -o-repeating-linear-gradient(-90deg, $color1 , $color1 14.3%, $color2 14.4%, $color2 28.5%, $color3 28.6%, $color3 42.8%, $color4  42.9%, $color4 57.1%, $color3 57.2%, $color3 71.4%, $color2 71.5%, $color2 85.7%, $color1 85.8%, $color1  100%);
+    background: -moz-repeating-linear-gradient(-90deg, $color1 , $color1 14.3%, $color2 14.4%, $color2 28.5%, $color3 28.6%, $color3 42.8%, $color4  42.9%, $color4 57.1%, $color3 57.2%, $color3 71.4%, $color2 71.5%, $color2 85.7%, $color1 85.8%, $color1  100%);
+    background: repeating-linear-gradient(-90deg, $color1, $color1  14.3%, $color2 14.4%, $color2 28.5%, $color3 28.6%, $color3 42.8%, $color4  42.9%, $color4 57.1%, $color3 57.2%, $color3 71.4%, $color2 71.5%, $color2 85.7%, $color1  85.8%, $color1 100%);
+  }
+
+
+  input.slider_3positions[type=range]::-webkit-slider-runnable-track {
+    height: 32px;
+    @include sliderBackground_3("orange")  ;
+    /*border: 5px solid black;*/
+  }
+
+  input.slider_3positions[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 32px;
+    width:0%;
+    border-color: color("red", "lighten-1") ;;
+    border: 2px solid color("red", "lighten-1") ;;
+    border-top : none ; 
+    //background-color: transparent;
+    transform-origin: 50% 50%;
+    margin: 0 0 0 0;
+    transition: .3s;
+    border-radius : 0px ; 
+    background:repeating-linear-gradient(
+      45deg,
+      rgba(230, 0, 0,0.3),
+      rgba(230, 0, 0,0.3) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  }
+  input.slider_3positions.extreme[type=range]::-webkit-slider-thumb {
+    width: 42.9%;
+    border-color: color("red", "darken-2") ;;
+    border: 2px solid color("red", "darken-2") ;;
+    border-top : none ; 
+    background:repeating-linear-gradient(
+      45deg,
+      rgba(200, 0, 0,0.3),
+      rgba(200, 0, 0,0.3) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  }
+
+  input.slider_3positions[type=range]:focus::-webkit-slider-runnable-track {
+    @include sliderBackground_3("cyan");
+    /*border: 5px solid black;*/
+  }
+
+  /*FF*/
+  input.slider_3positions[type=range]{
+    /* fix for FF unable to apply focus style bug  */
+    border: 1px solid white;
+    /*required for proper track sizing in FF*/
+  }
+
+  input.slider_3positions[type=range]::-moz-range-track {
+    height: $height;
+    @include sliderBackground_3("cyan");
+    /*border: 5px solid black;*/
+  }
+
+  input.slider_3positions[type=range]::-moz-range-thumb {
+    border: none;
+    height:  $height;
+    width: 14.3%;
+    border-color: black;
+    border: 3px solid black;
+    border-radius: 0;
+    background: black;
+    background-color: transparent;
+    transform-origin: 50% 50%;
+    margin-top: -3px;
+    border-radius: 0px ; 
+  }
+
+  /*hide the outline behind the border*/
+  input.slider_3positions[type=range]:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+  }
+
+  input.slider_3positions[type=range]:focus::-moz-range-track {
+    @include sliderBackground_3("cyan");
+    /*border: 5px solid black;*/
+  }
+
+  /* IE 10+*/
+  input.slider_3positions[type=range]::-ms-track {
+    height:  $height;
+
+    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    @include sliderBackground_3("cyan");
+    /*border: 5px solid black;*/
+
+    /*leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
+    border-width: 6px 0;
+
+    /*remove default tick marks*/
+    color: transparent;
+  }
+
+  input.slider_3positions[type=range]::-ms-fill-lower {
+    @include sliderBackground_3("cyan");
+    border: 5px solid black;
+  }
+
+  input.slider_3positions[type=range]::-ms-fill-upper {
+    @include sliderBackground_3("cyan");
+    /*border: 5px solid black;*/
+  }
+
+  input.slider_3positions[type=range]::-ms-thumb {
+    border: none;
+    height: $height + 10px;
+    width: 14px;
+    border-radius: 0;
+    background: $radio-fill-color;
+  }
+
+  input.slider_3positions[type=range]:focus::-ms-fill-lower {
+    background: #888;
+  }
+
+  input.slider_3positions[type=range]:focus::-ms-fill-upper {
+    background: #ccc;
+  }
+}

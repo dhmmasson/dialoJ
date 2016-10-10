@@ -1,36 +1,46 @@
-.col.s12.l10.offset-l1.main.z-depth-1#users
-	.row.onglets 
-		.col.s12
-			ul.tabs
-				each user in users 
-					li.tab.col.s2
-						a( id="user_tab_" + user.id,  href="#usr_pan_"+user.id )= user.nom 
+form.col.s12.l10.offset-l1.main.z-depth-1#users
 	.row
 		.col.s12
-			each user  in users 
-				.col.s12( id="usr_pan_"+user.id  )
-					div.row 
-						span.col.m2.s6= ((user.sex == "male") ? "M. " : "Mme. " )+ user.prenom + " " + user.nom					
-						span.col.m2.s6= "diplome bac +" + user.lastDiploma
-						span.col.m2.s6= "organisme " + user.organism
-
-					div.collection
-						each vote in votes
-							if vote.user_id == user.id 
-								.collection-item.row.small-Vpadding.valign-wrapper.dialoJ-range
+			p 
+				span Vous pouvez à présent consulter ci-dessous votre 
+				span.bold Profil d'innovateur 
+	.row 
+		.col.s12 
+						div.collection
+							each vote in evals								
+								-
+									var desc = vote.dialogie.replace( /(%s)|(%n)/gi, 
+												function( match, p1, p2 ) { 
+													if( p1 ) return  dialogie.southPole; 
+													if ( p2 ) return dialogie.northPole; 
+												} )											
+								.collection-item.row.small-Vpadding.valign-wrapper.dialoJ-range( title=desc  )
 									-	
-										southPoleFont = "accent_"+(7 - vote.value ); 
-										northPoleFont = "accent_"+(vote.value - 1 );
+										southPoleFont = "accent_"+(7 - vote.voteValue ); 
+										northPoleFont = "accent_"+(vote.voteValue - 1 );
 										evalId = ["utilité", "", "compréhension", "situation", "redondance", "mal à l'aise"]
-									span.col.s4.right-align.valign( class=southPoleFont )= vote.southPole
-									input.col.s2.offset-s1.center-align.no-Vmargin( type="range" , min=1, max=7, value= vote.value )
-									span.col.s4.offset-s1.valign( class=northPoleFont )= vote.northPole
-									if vote.evalsID	
-										- 
-											var metriques =  vote.evalsID.split(",") ;
-											var badge = ""
-											for( var i in metriques ) {
-												badge += evalId[ metriques[i] ] + ", "
-											}											
-											badge = badge.slice(0,-2)
-										span.badge.red-text= badge
+										c1 = vote.value == -1;
+										c2 = vote.value ==  0;
+										c3 = vote.value ==  1;	
+									.col.s12
+										.row.no-Vmargin
+											span.col.s4.right-align.valign( class=southPoleFont )= vote.southPole
+											span.col.s4.center-align
+												.row.no-Vmargin
+													input.col.s12.center-align.no-Vmargin.slider-resultat( disabled, type="range" , min=1, max=7, value= vote.voteValue, )
+											span.col.s4.valign( class=northPoleFont )= vote.northPole
+										ul.row.no-Vmargin.collapsible.targetProfile( data-collapsible="accordion" )
+											li
+												.row.collapsible-header 
+													span.caret.right ▼
+													span.right Sur ce point, je cherche un profil de personne particulier 													
+												.row.collapsible-body
+													.div.col.s4
+														input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_sim", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="-1" checked=c1)
+														label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_sim" class=northPoleFont )= vote.southPole
+													.div.col.s4
+														input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_que", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="0", checked=c2)
+														label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_que" )= "quelconque"
+													.div.col.s4
+														input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_opp", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="1", checked=c3)
+														label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_opp"  class=southPoleFont)= vote.northPole				

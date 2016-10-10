@@ -1,0 +1,27 @@
+.col.s12.l10.offset-l1.main.z-depth-1#profil
+	.row.onglets 
+		.col.s12
+			ul.tabs
+				each user in users 
+					li.tab.col.s2
+						a( id="pro_tab_" + user.id,  href="#pro_pan_"+user.id )= user.nom 
+	.row
+		.col.s12
+			each user  in users 
+				.col.s12( id="pro_pan_"+user.id  )
+					div.row 
+						span.col.m2.s6= ((user.sex == "male") ? "M. " : "Mme. " )+ user.prenom + " " + user.nom					
+						span.col.m2.s6= "diplome bac +" + user.lastDiploma
+						span.col.m2.s6= "organisme " + user.organism
+
+					div.collection
+						each eval in evals
+							if eval.user_id == user.id 
+								.collection-item.row.small-Vpadding.valign-wrapper.dialoJ-range
+									-	
+										southPoleFont = "accent_"+(4 - 3*eval.value ); 
+										northPoleFont = "accent_"+(4 + 3*eval.value );
+										evalId = ["utilité", "", "compréhension", "situation", "redondance", "mal à l'aise"]
+									span.col.s4.right-align.valign( class=southPoleFont )= eval.southPole
+									input.col.s2.offset-s1.center-align.no-Vmargin( type="range" , min=1, max=7, value= 4+3*eval.value )
+									span.col.s4.offset-s1.valign( class=northPoleFont )= eval.northPole								

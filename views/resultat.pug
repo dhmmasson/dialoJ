@@ -26,21 +26,19 @@ block content
 		}
 
 	script!= "var data= " + json +" ; dialOgie= " + JSON.stringify( dialogiesTab ) 
-	script= "setTimeout( 1000, function() {calculDistance( data[ 2 ], data[ 0 ] ) } )"  
+	//- script= "setTimeout( 1000, function() {calculDistance( data[ 2 ], data[ 0 ] ) } )"  
 	.row.onglets 
 		.col.s12.l10.offset-l1
 			ul.tabs
 				li.tab.col.s2
-					a( href="#users" ) utilisateurs
+					a( href="#home" ) Accueil
 				li.tab.col.s2
-					a( href="#dialogie" ) dialogie
+					a( href="#users" ) Mon profil
 				li.tab.col.s2
-					a( href="#distance" ) distance	
-				li.tab.col.s2
-					a.active( href="#audio" ) audio	 
+					a#afficheRecommandation( href="#recommandation" ) Recommandations	
 	.row
+		include messageFeedback
 		include user
-		include dialogie
-		include distance
-		include audio
+		include recommandation
+		
 										

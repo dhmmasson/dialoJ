@@ -1,0 +1,31 @@
+script!= "json="+json
+form.col.s12.l10.offset-l1.main.z-depth-1#filter
+	.row
+		.col.s12
+				.row 
+					.col.s12 
+						div.collection
+							each vote in evals								
+								-
+									var desc = vote.dialogie.replace( /(%s)|(%n)/gi, 
+												function( match, p1, p2 ) { 
+													if( p1 ) return  dialogie.southPole; 
+													if ( p2 ) return dialogie.northPole; 
+												} )											
+								.collection-item.row.small-Vpadding.valign-wrapper.dialoJ-range( title=desc  )
+									-	
+										southPoleFont = "accent_"+(7 - vote.value ); 
+										northPoleFont = "accent_"+(vote.value - 1 );
+										c1 = vote.value == -1;
+										c2 = vote.value ==  0;
+										c3 = vote.value ==  1;											
+									.div.col.s4
+										input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_sim", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="-1" checked=c1)
+										label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_sim" class=northPoleFont )= vote.southPole
+									.div.col.s4
+										input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_que", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="0", checked=c2)
+										label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_que" )= "quelconque"
+									.div.col.s4
+										input( type="radio", id="check_"+vote.id+"_"+vote.metrique_id+"_opp", name="dialogie_"+vote.id+"_metrique_"+vote.metrique_id, value="1", checked=c3)
+										label.filled-in-box( for="check_"+vote.id+"_"+vote.metrique_id+"_opp"  class=southPoleFont)= vote.northPole									
+	

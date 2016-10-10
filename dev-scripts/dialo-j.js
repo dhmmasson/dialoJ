@@ -91,7 +91,7 @@ requirejs.config({
 });
 
 // Start the main app logic.
-requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jqueryui/ui/sortable'],
+requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jqueryui/ui/sortable', "recommandation"],
   function (amref) {
     $('#dialogie').submit( traitementFormulaire );    
     $("select").material_select()   
@@ -147,7 +147,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
       $this = $( this ) ; 
       e.preventDefault() 
       var data = $this.serialize()
-      console.log( data )
+      
       $.post( "/completeProfile", data, function() {} ) 
 
 
@@ -218,7 +218,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
         var d =  user1.votes[ i ] - user2.votes[ i ] 
         resultat +=  d*d 
       }
-      return Math.sqrt(resultat ) /34 * 100 
+      return Math.sqrt(resultat ) /user1.votes.length * 100 
     }
     function moyenneDiff( user1, user2 ) {
       resultat = 0 
@@ -226,7 +226,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
         var d =  user1.votes[ i ] - user2.votes[ i ] 
         resultat += Math.sqrt( d*d )
       }
-      return resultat / 34
+      return resultat / user1.votes.length
     }
     function cosineDist( user1, user2 ) {
       denominateur = 0 
@@ -250,20 +250,18 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
 
     function calculDistance( users, votes ) {
 
-
       var hashUsers = prepareUsers( users, votes )
-
       var distMatrice = {} ;
-
       for( var indexUser1 in hashUsers ) {
         distMatrice[ hashUsers[indexUser1].nom ] = {} 
       }
 
-    
+
+      window.distMatrice = distMatrice ;
 
 
       for( var indexUser1 in hashUsers ) {
-        console.log( "####", indexUser1 )
+        
         user1 = hashUsers[ indexUser1 ] ; 
         for( var indexUser2 in hashUsers ) {
           //Don'T do the job twice, don'T compare to yourself 
@@ -273,6 +271,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
               euclidienne : distanceEuclidienne( user1, user2 )
             , moyenne : moyenneDiff( user1, user2 )
             , cosine : cosineDist( user1, user2 )
+           
           }
           
           distMatrice[ user1.nom ][  user2.nom  ] = dist ; 
@@ -291,7 +290,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
         var valueField = "value_" + user1.id 
         graphs.push( 
         {
-            title : user1.nom + " " + Math.round(  distMatrice[ "Masson" ][ user1.nom ].cosine * 100 ) 
+            title : user1.nom + " " + Math.round(  distMatrice[ "Legardeur" ][ user1.nom ].cosine * 100 ) 
           , valueField : valueField
           , type: "column"
           , fillAlphas: 0.8
@@ -353,12 +352,12 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
           }
         , "columnSpacing": 1
         , columnWidth : 0.8 
-        , rotate:true
+        , rotate:false
 
         , "categoryAxis": {
-            //"gridPosition": "start"
-            //, "position": "left"
-             gridCount : 34
+            "gridPosition": "start"
+            , "position": "left"
+            , gridCount : 34
             , autoGridCount : false
           }
          ,  "guides": [
@@ -390,8 +389,6 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
       var categoryAxis = chart.categoryAxis;
       categoryAxis.gridCount = 34 ;
       categoryAxis.autoGridCount = false;
-
-      console.log( distMatrice )
       return distMatrice ;
     }
 
@@ -399,6 +396,26 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
 
    $( function() {calculDistance( data[2], data[0] )})
 
+
+  $( function() {
+    recommandation.init(data[6], data[2], data[0] )
+    recommandation.afficheRecommandation() ;
+    $("#afficheRecommandation").click( recommandation.afficheRecommandation.bind( recommandation ) )  ;
+
+  })
+
+  $( function() {
+    $(".slider_3positions").click( function( ) {
+      $this = $(this)
+      console.log( "coucou", $this.val(), $this.attr("class"))
+      $this.removeClass("extreme")
+      if( $this.val() != 0 ) $this.addClass("extreme") ;
+      console.log( "coucou", $this.val(), $this.attr("class"))
+    })
+
+
+
+  })
 
 
 
