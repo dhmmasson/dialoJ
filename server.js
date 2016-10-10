@@ -104,7 +104,16 @@ function finishRegistration( requete, reponse ){
                 , { expiresIn: "24h" // expires in 24 hours    
                 } ) ;
   reponse.cookie( 'token', token );
-  reponse.redirect('/splash')
+
+
+  var sql = "select count( value ) as count from evaldialogie where evaldialogie.user_id = " + requete.dialoJ_user.id
+  sqlPooled( { sql : sql }, redirectFnRegistraton, requete, reponse ) ;
+}
+function redirectFnRegistraton( requete, reponse, rows ) {
+  if( rows[0].count > 0  )
+    reponse.redirect('/feedback')
+  else   
+    reponse.redirect('/splash')
 }
 
 //================================================================
