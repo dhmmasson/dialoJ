@@ -394,11 +394,16 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
 
     window.calculDistance = calculDistance ;
 
-   $( function() {calculDistance( data[2], data[0] )})
+   $( function() {
+     if( data != undefined  && data.length > 3 ) {
+        calculDistance( data[2], data[0] )}
+      }
+
+    )
 
 
   $( function() {
-    if( data && data.length > 6 ) {
+    if(  data != undefined  && data.length > 6 ) {
         recommandation.init(data[6], data[2], data[0] )
         recommandation.afficheRecommandation() ;
         $("#afficheRecommandation").click( recommandation.afficheRecommandation.bind( recommandation ) )  ;
