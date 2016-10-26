@@ -398,10 +398,11 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
 
 
   $( function() {
-    recommandation.init(data[6], data[2], data[0] )
-    recommandation.afficheRecommandation() ;
-    $("#afficheRecommandation").click( recommandation.afficheRecommandation.bind( recommandation ) )  ;
-
+    if( data && data.length > 6 ) {
+        recommandation.init(data[6], data[2], data[0] )
+        recommandation.afficheRecommandation() ;
+        $("#afficheRecommandation").click( recommandation.afficheRecommandation.bind( recommandation ) )  ;
+    }
   })
 
   $( function() {
