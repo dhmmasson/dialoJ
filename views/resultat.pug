@@ -25,7 +25,7 @@ block content
 			}
 		}
 
-	script!= "var data= " + json +" ; dialOgie= " + JSON.stringify( dialogiesTab ) 
+	script!= "var data= " + json +" ; dialOgie= " + JSON.stringify( dialogiesTab ) + "; filters = data[6]"
 	//- script= "setTimeout( 1000, function() {calculDistance( data[ 2 ], data[ 0 ] ) } )"  
 	.row.onglets 
 		.col.s12.l10.offset-l1
@@ -35,7 +35,7 @@ block content
 				li.tab.col.s2
 					a( href="#users" ) Mon profil
 				li.tab.col.s2
-					a#afficheRecommandation( href="#recommandation" ) Recommandations	
+					a#afficheRecommandation.active( href="#recommandation" ) Recommandations	
 	.row
 		include messageFeedback
 		include user

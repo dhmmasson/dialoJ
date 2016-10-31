@@ -1,9 +1,25 @@
 script!= "json="+json
-.col.s12.l10.offset-l1.main.z-depth-1#recommandation
+.col.s12.l10.offset-l1#recommandation.main.z-depth-1
 	.row
 		.col.s12
-			p Voici les 5 participants à cet événement dont le profil d'innovateur correspond le plus au regard des réponses que vous avez tous apportées et du jeu de filtres que vous avez appliqué. 
+			h5 
+				span L'outil DialoJ à choisi 5 champions pour vous! 
+			p 
+				span Il s'agit des 5 participants à l'événement 
+				span La journée pro du Design Summer Camp 2016 
+				span dont le profil vous correspond le plus au regard des réponses que vous avez tous apportées.
+			//- p 
+			//- 	span Par contre, si vous cherchez des participants avec des profils particuliers vous pouvez 
+			//- 	span.bold créer un filtre 
+			//- 	span pour spécifier les orientations que vous souhaitez retrouver. 
+
 			p Les colonnes Stratégie,	Interactions,	Sécurité,	Objectifs et Valeurs correspondent aux 5 catégories de dialogies auxquelles vous avez répondues. La colonne Total correspond au potentiel de matching toutes catégories confondues. 
-	.row
+
+				
+	.row#profilFilterDiv
+		include profileFilter 
+		.col.s12
+			p Voici les 5 profils préparés pour vous par DialoJ
+			//- p Voici les 5 nouveaux profils suggérés par DialoJ au vu des filtres suivants : 	
 		.col.s12#tableWrapper
-		
+			

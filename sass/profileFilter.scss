@@ -1,0 +1,79 @@
+.filters{
+	line-height : 3em ;
+	
+}
+
+#modal1 {
+	width:80% ; 
+}
+
+.profilSelector {
+	margin : 5px ; 
+}
+
+.dialogiePoles {
+
+		@extend .chip; 
+		margin : 3px 5px ;
+		padding : 2px ; 
+		display: table;
+
+		a {
+	    background: rgba(0,0,120,0.1);
+	    display: table-cell;
+	    height: 32px;	    
+	    padding: 0px 10px;
+	    letter-spacing: normal;
+		}
+		.separator {
+			padding : 1px ; 
+		}
+		:last-child {
+			background : $primary-color ; 
+			border-radius: 0 16px 16px 0;			
+		}
+		:first-child {
+			background: $secondary-color ;
+			border-radius: 16px 0 0 16px;
+		}
+	}
+
+#panier {
+
+}
+
+.poleSelected {
+
+	@extend .chip; 
+	margin : 3px 5px ;
+	
+	display: inline-block ;
+	.btn {
+		display: table-cell;
+		background : transparent ; 
+		box-shadow : none ;
+		height: 32px;	    
+		letter-spacing: normal;
+		padding: 0px 10px;
+		margin-top:  0px !important;
+	}
+
+	&.southPole{
+		&.temporary{
+			background: transparentize($secondary-color, 0.5) ;
+		}
+		background: $secondary-color ;
+		border-radius: 16px;
+	}
+	&.northPole  {
+			&.temporary{
+				background: transparentize( $primary-color, 0.5 )  ;
+			}
+			background : $primary-color ; 
+			border-radius: 16px;				
+	}
+
+
+
+
+}

@@ -404,7 +404,7 @@ requirejs(['amcharts.serial', 'amcharts.light', 'jquery', 'materialize', 'jquery
 
   $( function() {
     if(  data != undefined  && data.length > 6 ) {
-        recommandation.init(data[6], data[2], data[0] )
+        recommandation.init(data[7], data[2], data[0], data[6] )
         recommandation.afficheRecommandation() ;
         $("#afficheRecommandation").click( recommandation.afficheRecommandation.bind( recommandation ) )  ;
     }

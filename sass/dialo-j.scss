@@ -6,16 +6,18 @@ $secondary-color: color("cyan", "darken-1") !default;
 $input-bg-color: $primary-color;
 @import "materialize" ;
 
+
 .img-logo {
   height : 64px ; 
 }
 
 .main {
-	background : white ; 
+  background : white ; 
+  border-bottom : 5px ; 
 }
 
 body {
-	background : #eee ; 
+  background : #eee ; 
 
 
 }
@@ -220,5 +222,10 @@ Range
 @import "./slider_3positions" ;
 @import "./slider_5positions" ;
 @import "./slider_resultat" ;
+/***************
+Profile filter 
+***************/
+
+@import "./profileFilter" ;
 
 

@@ -1,0 +1,32 @@
+//- a.modal-trigger.waves-effect.waves-light.btn.profilSelector(href="#modal1") 5-Champions
+//- a.modal-trigger.waves-effect.waves-light.btn.profilSelector(href="#modal1") Créer un filtre
+
+.modal.modal-fixed-footer#modal1
+  .modal-content
+    h4 Configurez votre filtre 
+    span 
+      input#targetProfilId( type="hidden" value="")
+    .row
+      .input-field.col.s12
+        input#filterName( placeholder="Clients potentiels, Investisseurs, ..." type="text" ) 
+        label( for="filterName") titre du filtre
+    .row 
+      h5 Ajoutez des aspects au profil que vous recherchez
+      each categorie in categories  
+        .col.s6.filters
+          h5= categorie.description 
+          each dialogie in dialogies 
+            if dialogie.categorie_id == categorie.id 
+              - 
+                var desc = dialogie.description.replace( /(%s)|(%n)/gi, 
+                  function( match, p1, p2 ) { 
+                  if( p1 ) return dialogie.southPole; 
+                    if ( p2 ) return  dialogie.northPole; 
+                  } )
+              span.dialogiePoles( title=desc)
+                a.btn.waves-effect.filterDialogieBtn.southPole( id=dialogie.id+"_south" data-poletype="southPole" data-dialogieid=dialogie.id)= dialogie.southPole
+                a.separator   
+                a.btn.waves-effect.filterDialogieBtn.northPole( id=dialogie.id+"_north" data-poletype="northPole" data-dialogieid=dialogie.id)= dialogie.northPole
+         
+  .modal-footer#panier
+    a.modal-action.modal-close.waves-effect.waves-green.btn-flat(href="#!") Créez le filtre

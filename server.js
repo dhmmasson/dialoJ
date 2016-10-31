@@ -56,6 +56,9 @@ app.get( '/remerciment', checkAuthentication, upload.array(), renderFinalPage ) 
 app.get( '/resultat', affichageResultat ) ; 
 app.get( '/feedback', checkAuthentication, affichageResultatForOneUser ) ; 
 app.post( "/completeProfile", checkAuthentication, completeProfile ) ; 
+
+app.post( "/createFilter", checkAuthentication, createFilter ) ; 
+
 //================================================================
 //Login et register
 //================================================================
@@ -106,7 +109,7 @@ function finishRegistration( requete, reponse ){
   reponse.cookie( 'token', token );
 
 
-  var sql = "select count( value ) as count from evaldialogie where evaldialogie.user_id = " + requete.dialoJ_user.id
+  var sql = "select count( value ) as count from vote where vote.user_id = " + requete.dialoJ_user.id
   sqlPooled( { sql : sql }, redirectFnRegistraton, requete, reponse ) ;
 }
 function redirectFnRegistraton( connection, rows, requete, reponse) {
@@ -333,22 +336,103 @@ console.log( userId)
   var sql5 = "SELECT id, dialogie.description as description, southPole, northPole, categorie_id, position" + "\n"
           + "FROM   dialogie" + "\n"        
           + "WHERE  version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 )" + ";\n"
-  sqlPooled( {sql : sql + sql1 +sql2 + sql3 + sql4 + sql5  }, renderAfficheResultat, requete, reponse ) 
+  
+  var sql6 = "SELECT targetProfile.*, filter.*, dialogie.northPole, dialogie.southPole FROM filter " + "\n"
+           + "JOIN targetprofile ON targetprofile.id = filter.targetProfile_id " + "\n"
+           + "JOIN dialogie ON dialogie_id = dialogie.id "  + "\n"
+           + "WHERE targetprofile.visibility = 1 OR targetprofile.user_id = " + userId + "\n" 
+
+  sqlPooled( {sql : sql + sql1 +sql2 + sql3 + sql4 + sql5 + sql6 }, renderAfficheResultat, requete, reponse ) 
 
 }
 
 function renderAfficheResultat( connection, data, requete, reponse ) {
   connection.release() ; 
   data.push(requete.decoded.user)
-  reponse.render( "resultat", {json : JSON.stringify (data ), votes : data[0], users : data[2], evals : data[1], metriques : data[3], categories : data[4], dialogies : data[5] , user : requete.decoded.user })
+  reponse.render( "resultat", {json : JSON.stringify (data ), votes : data[0], users : data[2], evals : data[1], metriques : data[3], categories : data[4], dialogies : data[5] , user : requete.decoded.user, filters : data[6]   })
 
 }
 
+
+
+
+//================================================================
+//Filter
+//================================================================
+function createFilter( requete, reponse ) {
+console.log( "createFilter")
+  //verifie si le profil existe 
+  if( requete.body.targetProfile.id ) {
+    sql = "Select id from targetprofile where id = ? AND user_id = ? "
+    sqlPooled( { sql : sql , values : [ requete.body.targetProfile.id, requete.decoded.user.id ]} 
+             , processVerifProfile, requete, reponse  )
+  } else {
+    targetProfile = 
+    {
+      name: requete.body.targetProfile.name || "Profile"
+    , visibility: requete.body.targetProfile.visibility || 0 
+    , user_id: requete.decoded.user.id
+    }
+    sqlPooled( { sql : 'INSERT INTO targetprofile SET ?', values : targetProfile }, processCreateFilter, requete, reponse ) ; 
+  }
+
+}
+
+function processVerifProfile( connection, data, requete, reponse ) {
+  console.log( "verif profil")
+  if( data.length > 0 ) {
+    console.log( "profil existe")
+    //TODO : update Name, visibility 
+    processCreateFilter(  connection, data, requete, reponse )
+  } else {
+    console.log( "crée le profile")
+    connection.release() ;
+    targetProfile = 
+    {
+      name: requete.body.targetProfile.name || "Profile"
+    , visibility: requete.body.targetProfile.visibility || 0 
+    , user_id: requete.decoded.user.id
+    }
+    sqlPooled( { sql : 'INSERT INTO targetprofile SET ?', values : targetProfile }, processCreateFilter, requete, reponse ) ; 
+
+  }
+}
+function processCreateFilter( connection, data, requete, reponse ) {
+  connection.release() 
+
+  var userId = requete.decoded.user.id  ; 
+  console.log( data )
+  if( data.insertId != undefined ) { 
+    targetProfile_id = data.insertId 
+  } else {
+    targetProfile_id= requete.body.targetProfile.id
+  }
+  console.log( targetProfile_id )
+  filters = [] 
+  for( var i  = 0 ; i <  requete.body.filters.length ; i++ ) { 
+    filter = requete.body.filters[i]
+    filters.push( [ filter.dialogie_id, targetProfile_id, filter.absolute, filter.value ] )
+  }
+
+  sqlInsertion =  'INSERT INTO filter( dialogie_id, targetProfile_id, absolute, value ) VALUES ? ;\n'
+  sqlFilters = "SELECT targetProfile.*, filter.*, dialogie.northPole, dialogie.southPole FROM filter" + "\n"
+           + "JOIN targetprofile ON targetprofile.id = filter.targetProfile_id " + "\n"
+           + "JOIN dialogie ON dialogie_id = dialogie.id "  + "\n"
+           + "WHERE targetprofile.visibility = 1 OR targetprofile.user_id = " + userId + "\n" 
+
+  sqlPooled( { sql :sqlInsertion+sqlFilters, values : [filters]}, returnFilter, requete, reponse ) ; 
+
+}
+
+function returnFilter(  connection, data, requete, reponse  ) {
+  connection.release() 
+  
+  reponse.json( { filters : data[1] } )
+}
 //================================================================
 //Remerciement
 //================================================================
-function renderFinalPage( requete, reponse ) {
-  console.log( requete.user )
+function renderFinalPage( requete, reponse ) {  
   reponse.render( "final", { dialoJUser : requete.decoded.user, socialNetworkUserJSON : JSON.stringify(requete.user), socialNetworkUser : requete.user  } ) ;
 }
 
@@ -359,7 +443,7 @@ function completeProfile( requete, reponse ) {
   console.log( requete.body )
   var sql = "UPDATE user SET ? WHERE id = " + requete.decoded.user.id ;  
   sqlPooled(  {sql : sql, values : requete.body }, processCompleteProfile, requete, reponse )
-  
+    
 }
 function processCompleteProfile( connection, data, requete, reponse ) {
   connection.release() 
