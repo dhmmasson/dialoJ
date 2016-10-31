@@ -135,7 +135,7 @@ function checkAuthentication(requete, reponse, next) {
     , email  : "1"
     , auth0_id : "1"
     , displayName :"dddm"
-    , id : 142 
+    , id : 32 
     }}
     next() ;
     return 
@@ -316,14 +316,22 @@ console.log( userId)
           + "GROUP BY vote.id "+ "\n"
           + "ORDER BY user_id, dialogie_id "+ "\n"
           + "; " + "\n"
-  var sql1 = "SELECT dialogie.id, evaldialogie.user_id, southPole, northPole, position, dialogie.description as dialogie, metrique.description as metrique, metrique_id, vote.value as voteValue, evaldialogie.value as value  " + "\n"
-           + "FROM evaldialogie  " + "\n"
-           + "JOIN metrique ON metrique.id = metrique_id  " + "\n"
-           + "JOIN dialogie ON dialogie.id = evaldialogie.dialogie_id  " + "\n"
-           + "JOIN vote ON vote.`dialogie_id` = dialogie.id and vote.user_id = evaldialogie.user_id  " + "\n"
-           + "WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 ) AND vote.user_id =" +userId + "\n"
-           + "ORDER BY evaldialogie.user_id, dialogie.id "    
-             + "; " + "\n"      
+  // var sql1 = "SELECT dialogie.id, evaldialogie.user_id, southPole, northPole, position, dialogie.description as dialogie, metrique.description as metrique, metrique_id, vote.value as voteValue, evaldialogie.value as value  " + "\n"
+  //          + "FROM evaldialogie  " + "\n"
+  //          + "JOIN metrique ON metrique.id = metrique_id  " + "\n"
+  //          + "JOIN dialogie ON dialogie.id = evaldialogie.dialogie_id  " + "\n"
+  //          + "JOIN vote ON vote.`dialogie_id` = dialogie.id and vote.user_id = evaldialogie.user_id  " + "\n"
+  //          + "WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 ) AND vote.user_id =" +userId + "\n"
+  //          + "ORDER BY evaldialogie.user_id, dialogie.id "    
+  //            + "; " + "\n"      
+  var sql1 = "SELECT dialogie.id, vote.user_id, southPole, northPole, position, dialogie.description as dialogie, vote.value as voteValue " + "\n"
+  +"FROM dialogie "+ "\n"
+  +"JOIN vote ON vote.`dialogie_id` = dialogie.id "+ "\n"
+  +"WHERE  dialogie.version = ( SELECT MAX( version ) FROM dialogie LIMIT 1 ) AND vote.user_id =" +userId + "\n"
+  +"ORDER BY vote.user_id, dialogie.id "
+   + "; " + "\n"      
+
+
   var sql2 = "SELECT user.* " + "\n"
           + "FROM vote "+ "\n"
           + "JOIN user ON user.id = user_id "+ "\n"
