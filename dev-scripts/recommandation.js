@@ -57,10 +57,10 @@ define( [],
  				// $("#profilFilterDiv").prepend( $button )
 
  			}
-			$(".modal").modal({
- 					ready : prepareModal 
- 					, complete : createFilter.bind(this)
- 				})
+			// $(".modal").modal({
+ 		// 			ready : prepareModal 
+ 		// 			, complete : createFilter.bind(this)
+ 		// 		})
 		}
 		function computeRecommandation() {
 			// this.updateFiltre( filters ) 
