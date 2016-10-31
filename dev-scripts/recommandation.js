@@ -37,7 +37,7 @@ define( [],
 						, dialogies : {} 
 						} 
 				}
-				var valeur = ( 3 * (( filters[i].absolute == 1 ) ? filters[i].value : this.myself.orientationByDialogieId[ filters[i].dialogie_id ]))			
+				var valeur = (  (( filters[i].absolute == 1 ) ? filters[i].value : this.myself.orientationByDialogieId[ filters[i].dialogie_id ]))			
 				this.myself.filters[ filters[i].name ].dialogies[ filters[i].dialogie_id ] = {
 					value : valeur
 				, southPole : filters[i].southPole
@@ -107,11 +107,17 @@ define( [],
 		}
 
 
-		var symbols = ["<i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>", "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>", "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>", "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>", "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>",  "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>" ]
+		var symbols = ["<i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>",
+ "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>",
+ "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>",
+ "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons grey-text text-lighten-2'>star</i>",
+ "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>",
+  "<i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i><i class='material-icons'>star</i>" ]
 
 		function mapValeurToSymbol( valeur ) {
-			valeur = Math.min(  Math.floor( (100-valeur) / 33 ) , 2 ) ; 
-			return symbols[ valeur ] ;
+			valeur = Math.round( Math.max( 0, (100 - valeur - 50 )) * 2 / 20)
+			//valeur = Math.min(  Math.floor( (100-valeur) / 20 ) , 2 ) ; 
+			return  symbols[ valeur ] ;
 		} 
 
 
@@ -224,7 +230,7 @@ define( [],
       	  	hashUser[ vote.user_id ].votes[categorie] = {} 
       	  }      	
         hashUser[ vote.user_id ].votes[categorie][ vote.southPole ] = { dialogie_id : vote.dialogie_id, value : vote.value - 4 } 
-        hashUser[ vote.user_id ].orientationByDialogieId[ vote.dialogie_id ] = Math.sign( vote.value - 4 ) ;
+        hashUser[ vote.user_id ].orientationByDialogieId[ vote.dialogie_id ] = vote.value - 4  ;
       }     
       return hashUser
     }
